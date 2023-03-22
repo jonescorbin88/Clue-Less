@@ -1,0 +1,24 @@
+{
+  "name": "clue-less",
+  "version": "1.0.0",
+  "description": "SWE Team Project",
+  "main": "client.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jonescorbin88/Clue-Less.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jonescorbin88/Clue-Less/issues"
+  },
+  "homepage": "https://github.com/jonescorbin88/Clue-Less#readme",
+  "dependencies": {
+    "readline": "^1.3.0",
+    "socket.io-client": "^4.6.1"
+  }
+}
