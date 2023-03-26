@@ -1,7 +1,7 @@
 const readline = require('readline');
 const io = require('socket.io-client');
 
-const SERVER_URL = 'http://127.0.0.1:8081'; // Replace with your server URL
+const SERVER_URL = 'http://127.0.0.1:8081';
 
 const socket = io(SERVER_URL);
 
@@ -10,23 +10,26 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+// Prompt for username after successful connection
 socket.on('connect', () => {
-    console.log('Connection successful.')
-})
-
-// Listen for incoming messages from the server
-socket.on('message', (data) => {
-  console.log('Received message from server:', data);
+  rl.question("Please enter a username: ", username => {
+    socket.emit('add_username', username);
+  });
 });
 
-socket.on('broadcast', (data) => {
-    console.log('Received message from server:', data);
+// Output messages from the server
+socket.on('server_msg', (data) => {
+  console.log(data);
+});
+
+// Output chat messages coming from other clients
+socket.on('message', (data) => {
+  console.log(`${data.user}: ${data.message}`);
 });
 
 // Read user input from the command line and send it to the server
 rl.on('line', (input) => {
   socket.emit('message', input);
-  console.log('Sent message to server:', input);
 });
 
 // Clean up the socket connection when the process exits
