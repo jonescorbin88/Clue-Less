@@ -29,6 +29,8 @@ socket.on('message', (data) => {
 
 // Read user input from the command line and send it to the server
 rl.on('line', (input) => {
+  readline.moveCursor(process.stdout, 0, -1);
+  readline.clearScreenDown(process.stdout);
   socket.emit('message', input);
 });
 
