@@ -10,10 +10,32 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-// Prompt for username after successful connection
-socket.on('connect', () => {
+// Prompt user for a username
+socket.on('username_request', () => {
   rl.question("Please enter a username: ", username => {
     socket.emit('add_username', username);
+  });
+});
+
+// Prompt user to select a character
+socket.on('character_request', (data) => {
+  console.log('Select a character:');
+  for (let i = 0; i < data.characters.length; i++) {
+    console.log(`${i + 1}: ${data.characters[i]}`);
+  }
+  rl.question("Enter a number to select a character: ", selection => {
+    socket.emit('select_character', data.characters[selection - 1]);
+  });
+});
+
+// Prompt user to choose a game action
+socket.on('request_action', (data) => {
+  console.log('It\'s your turn!\nPlease select a game action:');
+  for (let i = 0; i < data.options.length; i++) {
+    console.log(`${i + 1}: ${data.options[i]}`);
+  }
+  rl.question("Enter a number to select a game action: ", selection => {
+    socket.emit('select_action', data.options[selection - 1]);
   });
 });
 
