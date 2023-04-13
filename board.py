@@ -12,6 +12,18 @@ class Board:
             'Ms. Peacock': (3, 0),
             'Mr. Green': (4, 1),
             'Mrs. White': (4, 3)
+        }  
+            
+        self.room_locs = {
+            "the Study": (0, 0),
+            "the Hall": (2, 0),
+            "the Lounge": (4. 0),
+            "the Library": (0, 2),
+            "the Billiard Room": (2, 2),
+            "the Dining Room": (4, 2),
+            "the Conservatory": (0, 4),
+            "the Ballroom": (2, 4),
+            "the Kitchen": (4, 4)
         }
         
     def index_2d(self, board, character):
