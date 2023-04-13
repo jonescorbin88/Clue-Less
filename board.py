@@ -17,7 +17,7 @@ class Board:
         self.room_locs = {
             "the Study": (0, 0),
             "the Hall": (2, 0),
-            "the Lounge": (4. 0),
+            "the Lounge": (4, 0),
             "the Library": (0, 2),
             "the Billiard Room": (2, 2),
             "the Dining Room": (4, 2),
