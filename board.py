@@ -123,7 +123,3 @@ class Board:
 
     def move_character(self, character, new_loc):
         self.char_locs[character] = new_loc
-
-if __name__ == '__main__':
-    board = Board()
-    print(board.get_moves('Colonel Mustard'))

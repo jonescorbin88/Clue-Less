@@ -10,33 +10,105 @@ the game.
 """
 class Card(Enum):
     pass
+    # CANDLESTICK = (1, 'the Candlestick')
+    # KNIFE = (2, 'the Knife')
+    # LEAD_PIPE = (3, 'the Lead Pipe')
+    # REVOLVER = (4, 'the Revolver')
+    # ROPE = (5, 'the Rope')
+    # WRENCH = (6, 'the Wrench')
+
+    # MISS_SCARLET = (7, 'Miss Scarlet')
+    # COLONEL_MUSTARD = (8, 'Colonel Mustard')
+    # MRS_WHITE = (9, 'Mrs. White')
+    # MR_GREEN = (10, 'Mr. Green')
+    # MRS_PEACOCK = (11, 'Ms. Peacock')
+    # PROFESSOR_PLUM = (12, 'Professor Plum')
+
+    # STUDY = (13, 'the Study')
+    # HALL = (14, 'the Hall')
+    # LOUNGE = (15, 'the Lounge')
+    # LIBRARY = (16, 'the Library')
+    # BILLIARD_ROOM = (17, 'the Billiard Room')
+    # DINING_ROOM = (18, 'the Dining Room')
+    # CONSERVATORY = (19, 'Conservatory')
+    # BALLROOM = (20, 'Ballroom')
+    # KITCHEN = (21, 'the Kitchen')
+
+    # def get_by_num(num):
+    #     for item in Card:
+    #         if item.value[0] == num:
+    #             return item
+    
+    # def get_by_str(str):
+    #     for item in Card:
+    #         if item.value[1] == str:
+    #             return item
 
 class Weapon(Card):
-    CANDLESTICK = 1
-    KNIFE = 2
-    LEAD_PIPE = 3
-    REVOLVER = 4
-    ROPE = 5
-    WRENCH = 6
+    CANDLESTICK = (1, 'the Candlestick')
+    KNIFE = (2, 'the Knife')
+    LEAD_PIPE = (3, 'the Lead Pipe')
+    REVOLVER = (4, 'the Revolver')
+    ROPE = (5, 'the Rope')
+    WRENCH = (6, 'the Wrench')
+
+    def get_by_num(num):
+        for item in Weapon:
+            if item.value[0] == num:
+                return item
+            
+    def get_by_str(str):
+        for item in Weapon:
+            if item.value[1] == str:
+                return item
+            
+    def get_type_str():
+        return 'weapon'
 
 class Character(Card):
-    MISS_SCARLET = 7
-    COLONEL_MUSTARD= 8
-    MRS_WHITE = 9
-    MR_GREEN = 10
-    MRS_PEACOCK = 11
-    PROFESSOR_PLUM = 12
+    MISS_SCARLET = (7, 'Miss Scarlet')
+    COLONEL_MUSTARD = (8, 'Colonel Mustard')
+    MRS_WHITE = (9, 'Mrs. White')
+    MR_GREEN = (10, 'Mr. Green')
+    MRS_PEACOCK = (11, 'Ms. Peacock')
+    PROFESSOR_PLUM = (12, 'Professor Plum')
+
+    def get_by_num(num):
+        for item in Character:
+            if item.value[0] == num:
+                return item
+            
+    def get_by_str(str):
+        for item in Character:
+            if item.value[1] == str:
+                return item
+            
+    def get_type_str():
+        return 'character'
 
 class Room(Card):
-    STUDY = 13
-    HALL = 14
-    LOUNGE = 15
-    LIBRARY = 16
-    BILLIARD_ROOM = 17
-    DINING_ROOM = 18
-    CONSERVATORY = 19
-    BALLROOM = 20
-    KITCHEN = 21
+    STUDY = (13, 'the Study')
+    HALL = (14, 'the Hall')
+    LOUNGE = (15, 'the Lounge')
+    LIBRARY = (16, 'the Library')
+    BILLIARD_ROOM = (17, 'the Billiard Room')
+    DINING_ROOM = (18, 'the Dining Room')
+    CONSERVATORY = (19, 'Conservatory')
+    BALLROOM = (20, 'Ballroom')
+    KITCHEN = (21, 'the Kitchen')
+
+    def get_by_num(num):
+        for item in Room:
+            if item.value[0] == num:
+                return item
+            
+    def get_by_str(str):
+        for item in Room:
+            if item.value[1] == str:
+                return item
+            
+    def get_type_str():
+        return 'room'
 
 class Suggestion:
 
@@ -46,9 +118,9 @@ class Suggestion:
         self.character = character
         self.isAccusation = isAccusation
 
-class Turn:
-    def __init__(self):
-        pass
+    def equals(self, other):
+        return self.weapon == other.weapon and self.room == other.room and self.character == other.character
+
 
 class Location:
     def __init__(self, character: Character):
@@ -83,11 +155,14 @@ class Location:
 
 class Player:
 
-    def __init__(self, username, num):
+    def __init__(self, username, num, loc):
         self.username = username
-        self.character = Character(6 + num)
-        self.loc = Location(self.character)
+        self.character = Character.get_by_num(6 + num)
+        self.loc = loc
         self.cards = []
+        self.prev_turn = []
+        self.curr_turn = []
+        self.enabled = True
 
     def setCards(self, cards):
         self.cards = cards
@@ -97,3 +172,19 @@ class Player:
 
     def takeTurn(self):
         pass
+
+    def make_suggestion(self, weapon, room, character):
+        sugg = Suggestion(weapon, room, character)
+        self.curr_turn.append(sugg)
+
+    def make_accusation(self, weapon, room, character):
+        acc = Suggestion(weapon, room, character, isAccusation=True)
+
+    def disable_player(self):
+        self.prev_turn = []
+        self.curr_turn = []
+        self.enabled = False
+
+    def end_turn(self):
+        self.prev_turn = self.curr_turn
+        self.curr_turn = []
