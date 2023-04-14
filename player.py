@@ -63,7 +63,7 @@ class Location:
         self.location = start_loc[character.value]
         self.inRoom = False
 
-    def getLocation(self)->list:
+    def get_location(self)->list:
         return self.location
 
     def getRoom(self):
@@ -75,25 +75,25 @@ class Location:
                  ]
         pass
 
-    def getHall(self):
+    def get_hall(self):
         pass
 
-    def setLocation(self):
+    def set_location(self):
         pass
 
 class Player:
 
     def __init__(self, username, num):
         self.username = username
-        self.character = Character(6 + num)
+        self.character = Character(7 + num)
         self.loc = Location(self.character)
         self.cards = []
 
-    def setCards(self, cards):
-        self.cards = cards
+    def add_card(self, card):
+        self.cards.append(card)
 
-    def setLoc(self, loc):
+    def set_loc(self, loc):
         self.loc = loc
 
-    def takeTurn(self):
+    def take_turn(self):
         pass
