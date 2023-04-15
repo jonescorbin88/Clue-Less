@@ -1,5 +1,6 @@
 from flask import Flask, request
 from flask_socketio import SocketIO, emit, disconnect
+import game
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -96,10 +97,12 @@ def create_server():
     socketio.on('add_username')(server.handle_add_username)
     socketio.on('select_character')(server.handle_select_character)
 
+    return server
+
 # Port thing might be an issue. We will have to make sure that the server is using a port that isn't already taken.
 if __name__ == '__main__':
     # Create the server
-    create_server()
+    server = create_server()
 
     # Run the app on local host with the given port
     socketio.run(app, host='127.0.0.1', port=8081)
