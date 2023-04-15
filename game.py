@@ -11,8 +11,10 @@ class Game:
         self.num_players = len(usernames)
         self.end_game = 0
         self.turn_idx = 0
-        # Dict (sid:username) so that we can send messages back to users directly
+        # Dict to get username from sid
         self.usernames = usernames
+        # Dict to get sid from username (so we can send messages to clients directly)
+        self.sids = dict((reversed(item) for item in usernames.items()))
         self.start_game(usernames)
         # send a broadcast message to all the players the game has started
 
@@ -21,6 +23,8 @@ class Game:
         self.players = self.create_players(list(usernames.values()))
         self.make_casefile()
         self.deal_cards()
+        self.server.emit_game_intro()
+        # Get the active player and start the first turn
         
     def create_players(self, usernames:list):
         players = []

@@ -7,7 +7,7 @@ socketio = SocketIO(app)
 
 class Server():
     def __init__(self):
-        self.num_clients = 2
+        self.num_clients = 0
         self.game_started = False
         self.usernames = {}
         self.confirmed = set()
@@ -30,6 +30,15 @@ class Server():
         else:
             emit('server_msg', 'Sorry! A game has already started. Please try again later.')
         emit('conn_refuse')
+
+    def emit_game_intro(self):
+        text = '**********\nWelcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
+to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
+to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
+with what weapon, and in which room. But be careful, the murderer is still on the loose and \
+may strike again! Are you ready to put on your thinking cap and solve the mystery? \
+Let the game begin!\n**********\n'
+        emit('server_msg', text, broadcast=True)
 
     def handle_disconnect(self):
         self.num_clients -= 1
@@ -65,6 +74,7 @@ class Server():
  
         self.confirmed.add(request.sid)
         if len(self.confirmed) == len(self.usernames):
+            emit('server_msg', 'Starting game...')
             self.game = game.Game(self.usernames, self)
             self.game_started = True
         else:
@@ -96,12 +106,15 @@ class Server():
         # Some call to a method in game
         pass
 
+    def handle_disprove(self, card):
+        # Some call to a method in game
+        pass
+
     def handle_accusation(self, suspect, weapon, room):
         # Some call to a method in game
         pass
 
     def emit_movement(self, sid, character, location, is_hall):
-        # fix logic here
         if not is_hall:
             emit('server_msg', f'{self.usernames[sid]} has moved {character} to {location}', broadcast=True)
         else:
@@ -114,8 +127,24 @@ class Server():
         emit('server_msg', f'{self.usernames[sid]} has accused {suspect}, in {room}, with {weapon}', broadcast=True)
 
     def emit_disprove(self, sid_disprove, sid_sugg):
-        emit('server_msg', f'{self.usernames[sid_disprove]} has disproved the suggestion made by {self.usernames[sid_sugg]}')
+        emit('server_msg', f'{self.usernames[sid_disprove]} has disproved the suggestion made by {self.usernames[sid_sugg]}', broadcast=True)
 
+    def emit_winner(self, sid, suspect, weapon, room):
+        winner = self.usernames[sid]
+        text = f'{winner} has guessed the case file correctly and won the game. Bravo!\n\
+            {winner} determined that {suspect} committed the crime, with {weapon}, in {room}.\n\
+            Thanks for playing!'
+        emit('server_msg', text, broadcast=True)
+
+    # Cards should be a list of strings
+    def emit_loser(self, sid, cards):
+        loser = self.usernames[sid]
+        card_str = ', '.join(cards)
+        text = f'Unfortunately, {loser} failed to guess the case file correctly. \
+            They will be removed from the game. It\'s up to the remaining players to solve the mystery \
+            before it\'s too late!\n \
+            {loser}\'s cards were: {card_str}'
+        emit('server_msg', text, broadcast=True)
 
 def create_server():
     # Create single instance of server
