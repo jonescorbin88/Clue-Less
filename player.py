@@ -1,5 +1,6 @@
 from enum import Enum
 from collections import defaultdict
+from board import Board
 
 from numpy import character
 
@@ -9,9 +10,6 @@ Each of the card types is implmeneted separately since they each are a different
 the game.
 """
 class Card(Enum):
-    pass
-
-class Weapon(Card):
     CANDLESTICK = 1
     KNIFE = 2
     LEAD_PIPE = 3
@@ -19,7 +17,59 @@ class Weapon(Card):
     ROPE = 5
     WRENCH = 6
 
-class Character(Card):
+    MISS_SCARLET = 7
+    COLONEL_MUSTARD = 8
+    MRS_WHITE = 9
+    MR_GREEN = 10
+    MRS_PEACOCK = 11
+    PROFESSOR_PLUM = 12
+
+    STUDY = 13
+    HALL = 14
+    LOUNGE = 15
+    LIBRARY = 16
+    BILLIARD_ROOM = 17
+    DINING_ROOM = 18
+    CONSERVATORY = 19
+    BALLROOM = 20
+    KITCHEN = 21
+        
+    def get_str(self):
+        return self._strings[self]
+
+Card._strings = {
+    Card.CANDLESTICK: "The Candlestick",
+    Card.KNIFE: "The Knife",
+    Card.LEAD_PIPE: "The Lead Pipe",
+    Card.REVOLVER: "The Revolver",
+    Card.ROPE: "The Rope",
+    Card.WRENCH: "The Wrench",
+    Card.MISS_SCARLET: "Miss Scarlet",
+    Card.COLONEL_MUSTARD: "Colonel Mustard",
+    Card.MRS_WHITE: "Mrs. White",
+    Card.MR_GREEN: "Mr. Green",
+    Card.MRS_PEACOCK: "Mrs. Peacock",
+    Card.PROFESSOR_PLUM: "Professor Plum",
+    Card.STUDY: "the Study",
+    Card.HALL: "The Hall",
+    Card.LOUNGE: "The Lounge",
+    Card.LIBRARY: "The Library",
+    Card.BILLIARD_ROOM: "The Billiard Room",
+    Card.DINING_ROOM: "The Dining Room",
+    Card.CONSERVATORY: "The Conservatory",
+    Card.BALLROOM: "The Ballroom",
+    Card.KITCHEN: "The Kitchen"
+}
+
+class Weapon(Enum):
+    CANDLESTICK = 1
+    KNIFE = 2
+    LEAD_PIPE = 3
+    REVOLVER = 4
+    ROPE = 5
+    WRENCH = 6
+
+class Character(Enum):
     MISS_SCARLET = 7
     COLONEL_MUSTARD= 8
     MRS_WHITE = 9
@@ -27,7 +77,11 @@ class Character(Card):
     MRS_PEACOCK = 11
     PROFESSOR_PLUM = 12
 
-class Room(Card):
+    def str_by_num():
+        pass
+        
+
+class Room(Enum):
     STUDY = 13
     HALL = 14
     LOUNGE = 15
@@ -46,48 +100,23 @@ class Suggestion:
         self.character = character
         self.isAccusation = isAccusation
 
+    def equals(self, other):
+        return self.weapon == other.weapon and self.room == other.room and self.character == other.character
+
 class Turn:
     def __init__(self):
         pass
 
-class Location:
-    def __init__(self, character: Character):
-        start_loc = defaultdict(lambda: [-1,-1])
-        start_loc[7] = [0,3]
-        start_loc[8] = [1,4]
-        start_loc[9] = [4,3]
-        start_loc[10] = [4,1]
-        start_loc[11] = [3,0]
-        start_loc[12] = [1,0]
-
-        self.location = start_loc[character.value]
-        self.inRoom = False
-
-    def get_location(self)->list:
-        return self.location
-
-    def getRoom(self):
-        board = [['Study', '_h1', 'Hall', '_h2', 'Lounge'],
-                 ['_h3', '_na_', '_h4', '_na_', '_h5'],
-                 ['Library', '_h6', 'Billiard', '_h7', 'Dining'],
-                 ['_h8', '_na_', '_h9', '_na_', '_h10'],
-                 ['Conservatory', '_h11', 'Ballroom', '_h12', 'Kitchen']
-                 ]
-        pass
-
-    def get_hall(self):
-        pass
-
-    def set_location(self):
-        pass
-
 class Player:
 
-    def __init__(self, username, num):
+    def __init__(self, username, num, loc):
         self.username = username
         self.character = Character(7 + num)
-        self.loc = Location(self.character)
         self.cards = []
+        self.prev_turn = []
+        self.curr_turn = []
+        self.enabled = True
+        self.loc = loc
 
     def add_card(self, card):
         self.cards.append(card)

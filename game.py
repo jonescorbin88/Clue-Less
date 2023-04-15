@@ -1,4 +1,4 @@
-from server import Server
+import server
 from player import Player, Suggestion, Card
 from board import Board
 import random
@@ -6,7 +6,7 @@ import player as p
 from random import shuffle, randrange
 
 class Game:
-    def __init__(self, usernames: list , server: Server):
+    def __init__(self, usernames: list , server: server.Server):
         self.server = server
         self.num_players = len(usernames)
         self.end_game = 0
@@ -15,18 +15,18 @@ class Game:
         # send a broadcast message to all the players the game has started
 
     def start_game(self, usernames: list):
-        self.players = self.create_players(usernames)
         self.board = Board()
+        self.players = self.create_players(usernames)
         self.make_casefile()
         self.deal_cards()
         
-    def create_players(self, usernames:list) -> list(Player):
+    def create_players(self, usernames:list):
         players = []
-        if(self.num_players < 3 or self.num_players > 6):
+        if (self.num_players < 3 or self.num_players > 6):
             # error checking
             pass
         for i in range(self.num_players):
-            players.append(Player(usernames[i], i))
+            players.append(Player(usernames[i], i, self.board.get_location(Card(7 + i).get_str())))
         return players
 
     def make_casefile(self):
@@ -34,8 +34,8 @@ class Game:
         for i in range(1, 22):
             cards.append(Card(i))
         weapon = Card(randrange(1, 6))
-        character = Card(randrange(7,12))
-        room = Card(randrange(13,21))
+        character = Card(randrange(7, 12))
+        room = Card(randrange(13, 21))
         cards.remove(weapon)
         cards.remove(character)
         cards.remove(room)
@@ -55,3 +55,4 @@ class Game:
             cur_player = self.players[self.turn_idx]
             
             # need to figure out turn logic
+            pass
