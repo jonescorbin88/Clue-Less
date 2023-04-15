@@ -6,17 +6,19 @@ import player as p
 from random import shuffle, randrange
 
 class Game:
-    def __init__(self, usernames: list , server: server.Server):
+    def __init__(self, usernames: dict, server: server.Server):
         self.server = server
         self.num_players = len(usernames)
         self.end_game = 0
         self.turn_idx = 0
+        # Dict (sid:username) so that we can send messages back to users directly
+        self.usernames = usernames
         self.start_game(usernames)
         # send a broadcast message to all the players the game has started
 
     def start_game(self, usernames: list):
         self.board = Board()
-        self.players = self.create_players(usernames)
+        self.players = self.create_players(list(usernames.values()))
         self.make_casefile()
         self.deal_cards()
         

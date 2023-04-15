@@ -10,10 +10,23 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+// Disconnect and terminate process if server refuses connection
+socket.on('conn_refuse', () => {
+  socket.disconnect();
+  process.exit();
+});
+
 // Prompt user for a username
 socket.on('username_request', () => {
   rl.question("Please enter a username: ", username => {
     socket.emit('add_username', username);
+  });
+});
+
+// Prompt user to start the game
+socket.on('start_request', () => {
+  rl.question('Enter START when you\'re ready to play!: ', res => {
+    socket.emit('start_game', res);
   });
 });
 
@@ -45,9 +58,9 @@ socket.on('server_msg', (data) => {
 });
 
 // Output chat messages coming from other clients
-socket.on('message', (data) => {
-  console.log(`${data.user}: ${data.message}`);
-});
+// socket.on('message', (data) => {
+//   console.log(`${data.user}: ${data.message}`);
+// });
 
 // Read user input from the command line and send it to the server
 rl.on('line', (input) => {
