@@ -24,28 +24,19 @@ class Server():
         print(f'Client ({request.sid}) connected.')
         emit('username_request')
 
-    def emit_refuse(self, num, sid):
-        if num == 1:
-            emit('server_msg', 'Sorry! There are already six players in the game. Please try again later.')
-        else:
-            emit('server_msg', 'Sorry! A game has already started. Please try again later.')
-        emit('conn_refuse')
-
-    def emit_game_intro(self):
-        text = '**********\nWelcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
-to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
-to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
-with what weapon, and in which room. But be careful, the murderer is still on the loose and \
-may strike again! Are you ready to put on your thinking cap and solve the mystery? \
-Let the game begin!\n**********\n'
-        emit('server_msg', text, broadcast=True)
-
     def handle_disconnect(self):
         self.num_clients -= 1
         if request.sid in self.usernames.keys():
             emit('server_msg', f'{self.usernames[request.sid]} has left the game.', broadcast=True)
             del self.usernames[request.sid]
         print(f'Client ({request.sid}) disconnected.')
+
+    def emit_refuse(self, num, sid):
+        if num == 1:
+            emit('server_msg', 'Sorry! There are already six players in the game. Please try again later.')
+        else:
+            emit('server_msg', 'Sorry! A game has already started. Please try again later.')
+        emit('conn_refuse')
 
     # def handle_message(self, data):
     #     print(f'Received message from {self.usernames[request.sid]}: ' + data)
@@ -80,6 +71,19 @@ Let the game begin!\n**********\n'
         else:
             emit('server_msg', 'Great! Waiting for other players to confirm...')
 
+    def emit_game_intro(self):
+        text = '**********\nWelcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
+to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
+to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
+with what weapon, and in which room. But be careful, the murderer is still on the loose and \
+may strike again! Are you ready to put on your thinking cap and solve the mystery? \
+Let the game begin!\n**********\n'
+        emit('server_msg', text, broadcast=True)
+
+    def emit_new_turn(self, sid):
+        emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
+
+
     def end_game(self):
         self.game = None
         self.game_started = False
@@ -87,12 +91,10 @@ Let the game begin!\n**********\n'
     # Location should be a string
     # Cards should be a list of strings
     # Options should be a list of strings (move character, make a suggestion, make an accusation)
-    def request_action(self, username, loc: str, cards: list, options: list):
-        emit('action_request', 
-             {'options': options,
-              'location': loc,
-              'cards': cards},
-            room=sid)
+    def request_action(self, sid, char: str, loc: str, cards: list, options: list):
+        text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}'
+        emit('server_msg', text, room=sid)
+        emit('action_request', {'options': options}, room=sid)
 
     def handle_select_action(self, selection):
         # Some call to a method in game 
@@ -142,8 +144,7 @@ Let the game begin!\n**********\n'
         card_str = ', '.join(cards)
         text = f'Unfortunately, {loser} failed to guess the case file correctly. \
             They will be removed from the game. It\'s up to the remaining players to solve the mystery \
-            before it\'s too late!\n \
-            {loser}\'s cards were: {card_str}'
+            before it\'s too late!\n'
         emit('server_msg', text, broadcast=True)
 
 def create_server():
@@ -154,10 +155,14 @@ def create_server():
     socketio.on('connect')(server.handle_connect)
     socketio.on('disconnect')(server.handle_disconnect)
     #socketio.on('message')(server.handle_message)
-    socketio.on('event')(server.handle_connect)
     socketio.on('start_game')(server.start_game)
     socketio.on('add_username')(server.handle_add_username)
     #socketio.on('select_character')(server.handle_select_character)
+    socketio.on('select_action')(server.handle_select_action)
+    socketio.on('select_movement')(server.handle_movement)
+    socketio.on('select_sugg')(server.handle_suggestion)
+    socketio.on('select_disprove')(server.handle_disprove)
+    socketio.on('select_acc')(server.handle_accusation)
 
     return server
 
