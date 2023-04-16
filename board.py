@@ -36,6 +36,9 @@ class Board:
     
     def is_not_room(self, loc):
         return self.get_room_str(loc).startswith('_n')
+
+    def is_room(self, loc):
+        return self.get_room_str(loc).startswith('the')
     
     def is_occupied(self, loc):
         return loc in self.char_locs.values()

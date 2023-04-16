@@ -16,7 +16,6 @@ class Game:
         # Dict to get sid from username (so we can send messages to clients directly)
         self.sids = dict((reversed(item) for item in usernames.items()))
         self.start_game(usernames)
-        # send a broadcast message to all the players the game has started
 
     def start_game(self, usernames: list):
         self.board = Board()
@@ -24,12 +23,12 @@ class Game:
         self.make_casefile()
         self.deal_cards()
         self.server.emit_game_intro()
-        # Get the active player and start the first turn
+        self.play_game()
         
     def create_players(self, usernames:list):
         players = []
         if (self.num_players < 3 or self.num_players > 6):
-            # error checking
+            # error checking? Or will the option to start a game be disabled with the improper number of players
             pass
         for i in range(self.num_players):
             players.append(Player(usernames[i], i, self.board.get_location(Card(7 + i).get_str())))
@@ -53,12 +52,81 @@ class Game:
         for idx, card in enumerate(self.cards):
             self.players[idx % self.num_players].add_card(card)
 
+    def make_move(self, player: Player, new_loc, player_idx):
+        self.board.move_character(player_idx, new_loc)
+        player.set_loc(new_loc)
+        player.last_suggested_room = None
 
+    def can_suggest(self, player: Player):
+        if not(self.board.is_room(player.loc)):
+            return False
+        if player.loc is player.last_suggested_room:
+            return False
+        return True
+
+    def make_suggestion(self, player: Player, suggestion: Suggestion, player_idx: int):
+        # server broadcasts suggestion was made
+        self.make_move(self.players[suggestion.character - 7], self.board.room_locs[suggestion.room.get_str()])
+        player.last_suggested_room = player.loc
+        for i in range(self.num_players - 1):
+            disproving_player = self.players[(player_idx + i + 1) % self.num_players]
+            disproval_cards = suggestion.card_set.union(set(disproving_player.cards))
+            if len(list(disproval_cards)) != 0:
+                # server sends disproval cards
+                # server shows suggesting player card
+                # server broadcasts suggestion was disproved and by which player, but not the card
+                break
+
+    def make_accusation(self, player: Player, accusation: Suggestion):
+        # server broadcasts accusation to all players
+        if accusation.equals(self.casefile):
+            # server broadcasts player has won, game ends.
+            self.end_game = True
+            return True
+        else:
+            # server broadcasts player has been removed from the game.
+            player.removed = True
+            return False
 
     def play_game(self):
         
         while not self.end_game:
-            cur_player = self.players[self.turn_idx]
+            idx = self.turn_idx % self.num_players
+            cur_player = self.players[idx]
+            if cur_player.removed:
+                self.turn_idx += 1
+                continue
             
-            # need to figure out turn logic
-            pass
+            can_suggest = False
+            can_move = False
+
+            moves = self.board.get_moves(cur_player)
+            # are we using the right method here?
+            self.server.request_action(self.sids[idx], cur_player, cur_player.loc, cur_player.cards, moves)
+            if self.can_suggest():
+                can_suggest = True
+            if len(moves) > 0:
+                can_move = True
+            can_accuse = True
+
+            while True:
+                # Get the user's choice of action - this method still needs to be implmented
+                user_choice = self.server.get_user_choice()
+                if user_choice[0] is 1 and can_move:
+                    self.make_move()
+                    can_move = False
+                elif user_choice[0] is 2 and can_suggest:
+                    self.make_suggestion(cur_player, Suggestion(Card(user_choice[1]), Card(user_choice[2]), Card(user_choice[3]), False), idx)
+                    can_suggest = False
+                elif user_choice[0] is 3 and can_accuse:
+                    self.make_accusation(cur_player, Suggestion(Card(user_choice[1]), Card(user_choice[2]), Card(user_choice[3]), True))
+                    can_accuse = False
+                    break
+                elif user_choice[0] is 0:
+                    # next turn
+                    break
+            
+            self.turn_idx += 1
+
+        #server broadcasts that the game has ended
+        #server returns to start screen
