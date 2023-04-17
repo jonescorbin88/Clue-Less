@@ -27,9 +27,6 @@ class Game:
         
     def create_players(self, usernames:list):
         players = []
-        if (self.num_players < 3 or self.num_players > 6):
-            # error checking? Or will the option to start a game be disabled with the improper number of players
-            pass
         for i in range(self.num_players):
             players.append(Player(usernames[i], i, self.board.get_location(Card(7 + i).get_str())))
         return players
@@ -53,6 +50,7 @@ class Game:
             self.players[idx % self.num_players].add_card(card)
 
     def make_move(self, player: Player, new_loc, player_idx):
+        # check if the character is associated with a player
         self.board.move_character(player_idx, new_loc)
         player.set_loc(new_loc)
         player.last_suggested_room = None
@@ -72,11 +70,13 @@ class Game:
             disproving_player = self.players[(player_idx + i + 1) % self.num_players]
             disproval_cards = suggestion.card_set.union(set(disproving_player.cards))
             if len(list(disproval_cards)) != 0:
-                # server sends disproval cards
-                # server shows suggesting player card
+                # server sends disproval cards to disproving player
+                # server shows suggesting player disproval card
                 # server broadcasts suggestion was disproved and by which player, but not the card
-                break
-
+                return True
+        # server notifies player nobody could disprove
+        return False
+ 
     def make_accusation(self, player: Player, accusation: Suggestion):
         # server broadcasts accusation to all players
         if accusation.equals(self.casefile):
@@ -102,7 +102,7 @@ class Game:
 
             moves = self.board.get_moves(cur_player)
             # are we using the right method here?
-            self.server.request_action(self.sids[idx], cur_player, cur_player.loc, cur_player.cards, moves)
+            # self.server.request_action(self.sids[idx], cur_player, cur_player.loc, cur_player.cards, moves)
             if self.can_suggest():
                 can_suggest = True
             if len(moves) > 0:
@@ -111,9 +111,9 @@ class Game:
 
             while True:
                 # Get the user's choice of action - this method still needs to be implmented
-                user_choice = self.server.get_user_choice()
+                user_choice = self.server.get_user_choice(can_move, can_suggest, can_accuse, moves)
                 if user_choice[0] is 1 and can_move:
-                    self.make_move()
+                    self.make_move(cur_player, user_choice[1], idx)
                     can_move = False
                 elif user_choice[0] is 2 and can_suggest:
                     self.make_suggestion(cur_player, Suggestion(Card(user_choice[1]), Card(user_choice[2]), Card(user_choice[3]), False), idx)
