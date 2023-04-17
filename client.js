@@ -10,6 +10,27 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+const map = ('---------------     ---------------     ---------------\n' +
+              '|             |     |             |     |             |\n' +
+              '|    Study     -----      Hall     -----     Lounge   |\n' +
+              '|              -----               -----              |\n' +
+              '|             |     |             |     |             |\n' +
+              '------   ------     ------   ------     ------   ------\n' +
+              '     |   |               |   |               |    |    \n' +
+              '------   ------     ------   ------     ------   ------\n' +
+              '|             |     |             |     |             |\n' +
+              '|   Library    -----    Billiard   -----     Dining   |\n' +
+              '|              -----      Room     -----      Room    |\n' +
+              '|             |     |             |     |             |\n' +
+              '------   ------     ------   ------     ------   ------\n' +
+              '     |   |               |   |               |    |    \n' +
+              '------   ------     ------   ------     ------   ------\n' +
+              '|             |     |             |     |             |\n' +
+              '| Conservatory -----    Ballroom   -----    Kitchen   |\n' +
+              '|              -----               -----              |\n' +
+              '|             |     |             |     |             |\n' +
+              '---------------     ---------------     ---------------\n');
+
 // Disconnect and terminate process if server refuses connection
 socket.on('conn_refuse', () => {
   socket.disconnect();

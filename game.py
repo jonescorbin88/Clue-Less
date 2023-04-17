@@ -13,8 +13,8 @@ class Game:
         self.turn_idx = 0
         # Dict to get username from sid
         self.usernames = usernames
-        # Dict to get sid from username (so we can send messages to clients directly)
-        self.sids = dict((reversed(item) for item in usernames.items()))
+        # List of characters associated with a player
+        self.characters = []
         self.start_game(usernames)
 
     def start_game(self, usernames: list):
@@ -22,13 +22,15 @@ class Game:
         self.players = self.create_players(list(usernames.values()))
         self.make_casefile()
         self.deal_cards()
-        self.server.emit_game_intro()
         self.play_game()
         
-    def create_players(self, usernames:list):
-        players = []
-        for i in range(self.num_players):
-            players.append(Player(usernames[i], i, self.board.get_location(Card(7 + i).get_str())))
+    def create_players(self, usernames:dict):
+        players = [] 
+        i = 0
+        for key, val in usernames.items():
+            players.append(Player(val, i, key, self.board.get_location(Card(7 + i).get_str())))
+            self.characters.append(Card(7 + i).get_str())
+            i += 1
         return players
 
     def make_casefile(self):
@@ -50,10 +52,12 @@ class Game:
             self.players[idx % self.num_players].add_card(card)
 
     def make_move(self, player: Player, new_loc, player_idx):
-        # check if the character is associated with a player
-        self.board.move_character(player_idx, new_loc)
+        self.board.move_character(player.character.get_str(), new_loc)
         player.set_loc(new_loc)
         player.last_suggested_room = None
+
+    def move_character(self, char, new_loc):
+        self.board.move_character(char, new_loc)
 
     def can_suggest(self, player: Player):
         if not(self.board.is_room(player.loc)):
@@ -63,8 +67,14 @@ class Game:
         return True
 
     def make_suggestion(self, player: Player, suggestion: Suggestion, player_idx: int):
-        # server broadcasts suggestion was made
-        self.make_move(self.players[suggestion.character - 7], self.board.room_locs[suggestion.room.get_str()])
+        self.server.emit_suggestion(player.sid,
+                                    suggestion.character.get_str(),
+                                    suggestion.weapon.get_str(),
+                                    suggestion.room.get_str())
+        if (suggestion.character in self.characters):
+            self.make_move(self.players[suggestion.character - 7], self.board.room_locs[suggestion.room.get_str()])
+        else:
+            self.move_character(suggestion.character.get_str(), self.board.room_locs[suggestion.room.get_str()])
         player.last_suggested_room = player.loc
         for i in range(self.num_players - 1):
             disproving_player = self.players[(player_idx + i + 1) % self.num_players]
@@ -75,20 +85,40 @@ class Game:
                 # server broadcasts suggestion was disproved and by which player, but not the card
                 return True
         # server notifies player nobody could disprove
+        self.server.emit_no_disprove(player.sid)
         return False
  
     def make_accusation(self, player: Player, accusation: Suggestion):
         # server broadcasts accusation to all players
+        self.server.emit_accusation(player.sid, 
+                                    accusation.character.get_str(), 
+                                    accusation.weapon.get_str(),
+                                    accusation.room.get_str())
         if accusation.equals(self.casefile):
             # server broadcasts player has won, game ends.
+            self.server.emit_winner(player.sid,
+                                    self.casefile.character.get_str(),
+                                    self.casefile.weapon.get_str(),
+                                    self.casefile.room.get_str())
             self.end_game = True
             return True
         else:
             # server broadcasts player has been removed from the game.
+            self.server.emit_loser(player.sid)
             player.removed = True
             return False
 
     def play_game(self):
+        
+        self.server.emit_game_intro()
+        for player in self.players:
+            player_cards = []
+            for card in player.cards:
+                player_cards.append(card.get_str())
+            self.server.emit_setup(player.sid, 
+                                   player.character.get_str(), 
+                                   self.board.get_room_str(player.loc), 
+                                   player_cards)
         
         while not self.end_game:
             idx = self.turn_idx % self.num_players
@@ -97,6 +127,14 @@ class Game:
                 self.turn_idx += 1
                 continue
             
+            self.server.emit_new_turn(cur_player.sid)
+            cards = []
+            for card in cur_player.cards:
+                cards.append(card.get_str())
+            self.server.emit_setup(cur_player.sid, 
+                                   cur_player.character.get_str(), 
+                                   self.board.get_room_str(cur_player.loc), 
+                                   cards)
             can_suggest = False
             can_move = False
 
@@ -110,6 +148,8 @@ class Game:
             can_accuse = True
 
             while True:
+                # Calculate this again as user may have moved into a room
+                can_suggest = self.can_suggest()
                 # Get the user's choice of action - this method still needs to be implmented
                 user_choice = self.server.get_user_choice(can_move, can_suggest, can_accuse, moves)
                 if user_choice[0] is 1 and can_move:
@@ -130,3 +170,4 @@ class Game:
 
         #server broadcasts that the game has ended
         #server returns to start screen
+        self.server.end_game()

@@ -47,6 +47,8 @@ class Board:
         return self.char_locs[character]
     
     def get_room_str(self, loc):
+        if self.is_hallway(loc):
+            return "the hallway"
         return self.board[loc[0]][loc[1]]
 
     def move_up(self, character):

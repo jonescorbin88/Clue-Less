@@ -11,6 +11,26 @@ class Server():
         self.game_started = False
         self.usernames = {}
         self.confirmed = set()
+        self.map = '---------------     ---------------     ---------------\n\
+            |             |     |             |     |             |\n\
+            |    Study     -----      Hall     -----     Lounge   |\n\
+            |              -----               -----              |\n\
+            |             |     |             |     |             |\n\
+            ------   ------     ------   ------     ------   ------\n\
+                 |   |               |   |               |    |    \n\
+            ------   ------     ------   ------     ------   ------\n\
+            |             |     |             |     |             |\n\
+            |   Library    -----    Billiard   -----     Dining   |\n\
+            |              -----      Room     -----      Room    |\n\
+            |             |     |             |     |             |\n\
+            ------   ------     ------   ------     ------   ------\n\
+                 |   |               |   |               |    |    \n\
+            ------   ------     ------   ------     ------   ------\n\
+            |             |     |             |     |             |\n\
+            | Conservatory -----    Ballroom   -----    Kitchen   |\n\
+            |              -----               -----              |\n\
+            |             |     |             |     |             |\n\
+            ---------------     ---------------     ---------------\n'
 
     def handle_connect(self):
         self.num_clients += 1
@@ -79,10 +99,14 @@ with what weapon, and in which room. But be careful, the murderer is still on th
 may strike again! Are you ready to put on your thinking cap and solve the mystery? \
 Let the game begin!\n**********\n'
         emit('server_msg', text, broadcast=True)
+        emit('server_msg', self.map, broadcast=True)
 
     def emit_new_turn(self, sid):
         emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
 
+    def emit_setup(self, sid, char: str, loc: str, cards: list):
+        text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}'
+        emit('server_msg', text, room=sid)
 
     def end_game(self):
         self.game = None
@@ -92,8 +116,8 @@ Let the game begin!\n**********\n'
     # Cards should be a list of strings
     # Options should be a list of strings (move character, make a suggestion, make an accusation)
     def request_action(self, sid, char: str, loc: str, cards: list, options: list):
-        text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}'
-        emit('server_msg', text, room=sid)
+        self.emit_setup(sid, char, loc, cards)
+        emit('server_msg', self.map)
         emit('action_request', {'options': options}, room=sid)
 
     def handle_select_action(self, selection):
@@ -129,7 +153,14 @@ Let the game begin!\n**********\n'
         emit('server_msg', f'{self.usernames[sid]} has accused {suspect}, in {room}, with {weapon}', broadcast=True)
 
     def emit_disprove(self, sid_disprove, sid_sugg):
-        emit('server_msg', f'{self.usernames[sid_disprove]} has disproved the suggestion made by {self.usernames[sid_sugg]}', broadcast=True)
+        emit('server_msg', f'{self.usernames[sid_disprove]} has disproved the suggestion made by {self.usernames[sid_sugg]}.', broadcast=True)
+
+    def emit_disprove_to_sugg(self, sid_disprove, sid_sugg, card):
+        text = f'Your suggestion was disproved by {self.usernames[sid_disprove]} with the following card: {card}.'
+        emit('server_msg', text, room=sid_sugg)
+
+    def emit_no_disprove(self, sid_sugg):
+        emit('server_msg', f'Mysterious! No one can disprove the suggestion made by {self.usernames[sid_sugg]}.', broadcast=True)
 
     def emit_winner(self, sid, suspect, weapon, room):
         winner = self.usernames[sid]
@@ -139,9 +170,8 @@ Let the game begin!\n**********\n'
         emit('server_msg', text, broadcast=True)
 
     # Cards should be a list of strings
-    def emit_loser(self, sid, cards):
+    def emit_loser(self, sid):
         loser = self.usernames[sid]
-        card_str = ', '.join(cards)
         text = f'Unfortunately, {loser} failed to guess the case file correctly. \
             They will be removed from the game. It\'s up to the remaining players to solve the mystery \
             before it\'s too late!\n'

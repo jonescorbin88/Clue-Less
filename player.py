@@ -108,10 +108,11 @@ class Suggestion:
 
 class Player:
 
-    def __init__(self, username, num, loc):
+    def __init__(self, username, sid, num, loc):
         self.username = username
         # Do we want this to be Card(7 + num)?
-        self.character = Character(7 + num)
+        self.character = Card(7 + num)
+        self.sid = sid
         self.cards = []
         self.enabled = True
         self.loc = loc
