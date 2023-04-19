@@ -61,6 +61,34 @@ Card._strings = {
     Card.KITCHEN: "the Kitchen"
 }
 
+card_strs = {
+    Card.CANDLESTICK: "The Candlestick",
+    Card.KNIFE: "The Knife",
+    Card.LEAD_PIPE: "The Lead Pipe",
+    Card.REVOLVER: "The Revolver",
+    Card.ROPE: "The Rope",
+    Card.WRENCH: "The Wrench",
+    Card.MISS_SCARLET: "Miss Scarlet",
+    Card.COLONEL_MUSTARD: "Colonel Mustard",
+    Card.MRS_WHITE: "Mrs. White",
+    Card.MR_GREEN: "Mr. Green",
+    Card.MRS_PEACOCK: "Mrs. Peacock",
+    Card.PROFESSOR_PLUM: "Professor Plum",
+    Card.STUDY: "the Study",
+    Card.HALL: "the Hall",
+    Card.LOUNGE: "the Lounge",
+    Card.LIBRARY: "the Library",
+    Card.BILLIARD_ROOM: "the Billiard Room",
+    Card.DINING_ROOM: "the Dining Room",
+    Card.CONSERVATORY: "the Conservatory",
+    Card.BALLROOM: "the Ballroom",
+    Card.KITCHEN: "the Kitchen"
+}
+
+card_map = {}
+for k, v in card_strs.items():
+    card_map[v] = k
+
 class Weapon(Enum):
     CANDLESTICK = 1
     KNIFE = 2
@@ -100,7 +128,6 @@ class Suggestion:
         self.character = character
         self.is_accusation = is_accusation
         self.card_set = {self.weapon, self.room, self.character}
-        self.is_valid_suggestion()
 
 
     def equals(self, other):

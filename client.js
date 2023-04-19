@@ -1,3 +1,4 @@
+const { read } = require('fs');
 const readline = require('readline');
 const io = require('socket.io-client');
 
@@ -68,18 +69,17 @@ socket.on('action_request', (data) => {
   for (let i = 0; i < data.options.length; i++) {
     console.log(`${i + 1}: ${data.options[i]}`);
   }
-  valid;
-  do {
-    rl.question("Enter a number to select a game action: ", selection => {
+  var readAction = function () {
+    rl.question("Enter a number to select a game action: ", (selection) => {
       if (parseInt(selection) < 0 || parseInt(selection) > data.options.length) {
         console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
+        readAction();
       } else {
         socket.emit('select_action', data.options[selection - 1]);
-        valid = true;
       }
     });
-  } while (!valid);
+  }
+  readAction();
 });
 
 // Prompt user to choose a movement action
@@ -88,62 +88,51 @@ socket.on('move_request', (data) => {
   for (let i = 0; i < data.options.length; i++) {
     console.log(`${i + 1}: ${data.options[i]}`);
   }
-  valid;
-  do {
-    rl.question("Enter a number to select a movement: ", selection => {
+  var readMove = function () {
+    rl.question("Enter a number to select a movement: ", (selection) => {
       if (parseInt(selection) < 0 || parseInt(selection) > data.options.length) {
         console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
+        readMove();
       } else {
         socket.emit('select_movement', data.options[selection - 1]);
-        valid = true;
       }
     });
-  } while (!valid);
+  }
+  readMove();
 });
 
 // Prompt user to make a suggestion
-socket.on('sugg_request', (data) => {
+socket.on('sugg_request', async (data) => {
   console.log('Time to make a suggestion! Take your best guess on who did the crime, and with what weapon.');
-  valid;
-  suspect;
-  weapon;
+  var suspect;
+  var weapon;
 
-  console.log('First, choose a suspect:');
-  for (let i = 0; i < data.char_options.length; i++) {
-    console.log(`${i + 1}: ${data.char_options[i]}`);
-  }
-
-  do {
-    rl.question("Enter a number to select a suspect: ", selection => {
+  const readSug = function () {
+    console.log('First, choose a suspect:');
+    for (let i = 0; i < data.char_options.length; i++) {
+      console.log(`${i + 1}: ${data.char_options[i]}`);
+    }
+    rl.question("Enter a number to select a suspect: ", (selection) => {
       if (parseInt(selection) < 0 || parseInt(selection) > data.char_options.length) {
         console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
       } else {
         suspect = data.char_options[selection - 1];
-        valid = true;
+        console.log('Next, choose a weapon:');
+        for (let i = 0; i < data.weap_options.length; i++) {
+          console.log(`${i + 1}: ${data.weap_options[i]}`);
+        }
+        rl.question("Enter a number to select a weapon: ", (selection) => {
+          if (parseInt(selection) < 0 || parseInt(selection) > data.weap_options.length) {
+            console.log('Uh-oh! You did not enter a valid option.')
+          } else {
+            weapon = data.weap_options[selection - 1];
+            socket.emit('select_sugg', suspect, weapon);
+          }
+        });
       }
     });
-  } while (!valid);
-
-  console.log('Now, choose a weapon:');
-  for (let i = 0; i < data.weap_options.length; i++) {
-    console.log(`${i + 1}: ${data.weap_options[i]}`);
   }
-
-  do {
-    rl.question("Enter a number to select a weapon: ", selection => {
-      if (parseInt(selection) < 0 || parseInt(selection) > data.weap_options.length) {
-        console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
-      } else {
-        weapon = data.weap_options[selection - 1];
-        valid = true;
-      }
-    });
-  } while (!valid);
-
-  socket.emit('select_sugg', suspect, weapon);
+  readSug();
 });
 
 // Prompt user to choose a card to disprove a suggestion
@@ -153,18 +142,17 @@ socket.on('disprove_request', (data) => {
     console.log(`${i + 1}: ${data.options[i]}`);
   }
 
-  valid;
-  do {
-    rl.question("Enter a number to select a card: ", selection => {
+  var readCard = function () {
+    rl.question("Enter a number to select a card to disprove the suggestion: ", (selection) => {
       if (parseInt(selection) < 0 || parseInt(selection) > data.options.length) {
-        console.log('Uh-oh! You did not enter a valid option.');
-        valid = false;
+        console.log('Uh-oh! You did not enter a valid option.')
+        readCard();
       } else {
-        socket.emit('select_disprove', card);
-        valid = true;
+        socket.emit('select_disprove', data.options[selection - 1]);
       }
     });
-  } while (!valid);
+  }
+  readCard();
 });
 
 // Prompt user to make an accusation
@@ -173,64 +161,87 @@ socket.on('acc_request', (data) => {
   'you win the game! If you do not, you will no longer be able to move your character, make suggestions, or ' +
   'make another accusation. You will be able to disprove suggestions made by other players. Take your best ' +
   'guess on who did the crime, where, and with what weapon.');
-  valid;
-  suspect;
-  room;
-  weapon;
+  var suspect;
+  var room;
+  var weapon;
 
-  console.log('First, choose a suspect:');
-  for (let i = 0; i < data.char_options.length; i++) {
-    console.log(`${i + 1}: ${data.char_options[i]}`);
-  }
-
-  do {
-    rl.question("Enter a number to select a suspect: ", selection => {
+  const readAcc = function () {
+    console.log('First, choose a suspect:');
+    for (let i = 0; i < data.char_options.length; i++) {
+      console.log(`${i + 1}: ${data.char_options[i]}`);
+    }
+    rl.question("Enter a number to select a suspect: ", (selection) => {
       if (parseInt(selection) < 0 || parseInt(selection) > data.char_options.length) {
         console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
       } else {
         suspect = data.char_options[selection - 1];
-        valid = true;
+        console.log('Next, choose a room:');
+        for (let i = 0; i < data.room_options.length; i++) {
+          console.log(`${i + 1}: ${data.room_options[i]}`);
+        }
+        rl.question("Enter a number to select a room: ", (selection) => {
+          if (parseInt(selection) < 0 || parseInt(selection) > data.room_options.length) {
+            console.log('Uh-oh! You did not enter a valid option.')
+          } else {
+            room = data.room_options[selection - 1];
+            console.log('Finally, choose a weapon:');
+            for (let i = 0; i < data.weap_options.length; i++) {
+              console.log(`${i + 1}: ${data.weap_options[i]}`);
+            }
+            rl.question("Enter a number to select a weapon: ", (selection) => {
+              if (parseInt(selection) < 0 || parseInt(selection) > data.weap_options.length) {
+                console.log('Uh-oh! You did not enter a valid option.')
+              } else {
+                weapon = data.weap_options[selection - 1];
+                socket.emit('select_acc', suspect, room, weapon);
+              }
+            });
+          }
+        });
       }
     });
-  } while (!valid);
-
-  console.log('Next, choose a room:');
-  for (let i = 0; i < data.room_options.length; i++) {
-    console.log(`${i + 1}: ${data.room_options[i]}`);
   }
-
-  do {
-    rl.question("Enter a number to select a room: ", selection => {
-      if (parseInt(selection) < 0 || parseInt(selection) > data.room_options.length) {
-        console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
-      } else {
-        room = data.room_options[selection - 1];
-        valid = true;
-      }
-    });
-  } while (!valid);
-
-  console.log('Finally, choose a weapon:');
-  for (let i = 0; i < data.weap_options.length; i++) {
-    console.log(`${i + 1}: ${data.weap_options[i]}`);
-  }
-
-  do {
-    rl.question("Enter a number to select a weapon: ", selection => {
-      if (parseInt(selection) < 0 || parseInt(selection) > data.weap_options.length) {
-        console.log('Uh-oh! You did not enter a valid option.')
-        valid = false;
-      } else {
-        weapon = data.weap_options[selection - 1];
-        valid = true;
-      }
-    });
-  } while (!valid);
-
-  socket.emit('select_acc', suspect, room, weapon);
+  readAcc();
 });
+    
+  
+  // const readRoom = async () => {
+  //   console.log('Next, choose a room:');
+  //   for (let i = 0; i < data.room_options.length; i++) {
+  //     console.log(`${i + 1}: ${data.room_options[i]}`);
+  //   }
+  //   rl.question("Enter a number to select a room: ", (selection) => {
+  //     if (parseInt(selection) < 0 || parseInt(selection) > data.room_options.length) {
+  //       console.log('Uh-oh! You did not enter a valid option.')
+  //       readRoom();
+  //     } else {
+  //       room = data.room_options[selection - 1];
+  //     }
+  //   });
+  // }
+
+  // const readWeapon = async () => {
+  //   console.log('Finally, choose a weapon:');
+  //   for (let i = 0; i < data.weap_options.length; i++) {
+  //     console.log(`${i + 1}: ${data.weap_options[i]}`);
+  //   }
+  //   rl.question("Enter a number to select a weapon: ", (selection) => {
+  //     if (parseInt(selection) < 0 || parseInt(selection) > data.weap_options.length) {
+  //       console.log('Uh-oh! You did not enter a valid option.')
+  //       readWeapon();
+  //     } else {
+  //       weapon = data.weap_options[selection - 1];
+  //     }
+  //   });
+  // }
+
+  // const getAcc = async () => {
+  //   await readSuspect();
+  //   await readRoom();
+  //   await readWeapon();
+  //   socket.emit('select_acc', suspect, room, weapon);
+  // }
+  // getAcc();
 
 // Output messages from the server
 socket.on('server_msg', (data) => {
