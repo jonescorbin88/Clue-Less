@@ -16,13 +16,13 @@ class Board:
             
         self.room_locs = {
             "the Study": (0, 0),
-            "the Hall": (2, 0),
-            "the Lounge": (4, 0),
-            "the Library": (0, 2),
+            "the Hall": (0, 2),
+            "the Lounge": (0, 4),
+            "the Library": (2, 0),
             "the Billiard Room": (2, 2),
-            "the Dining Room": (4, 2),
-            "the Conservatory": (0, 4),
-            "the Ballroom": (2, 4),
+            "the Dining Room": (2, 4),
+            "the Conservatory": (4, 0),
+            "the Ballroom": (4, 2),
             "the Kitchen": (4, 4)
         }
         
@@ -32,10 +32,16 @@ class Board:
                 return (i, x.index(character))
             
     def is_hallway(self, loc):
-        return self.get_room_str(loc).startswith('_h')
+        return self.get_room_str(loc) == 'the hallway'
     
     def is_not_room(self, loc):
         return self.get_room_str(loc).startswith('_n')
+
+    def is_room(self, loc):
+        str = self.get_room_str(loc)
+        if str == 'the hallway':
+            return False
+        return str.startswith('the')
     
     def is_occupied(self, loc):
         return loc in self.char_locs.values()
@@ -44,7 +50,11 @@ class Board:
         return self.char_locs[character]
     
     def get_room_str(self, loc):
-        return self.board[loc[0]][loc[1]]
+        str = self.board[loc[0]][loc[1]]
+        if str.startswith('_h'):
+            return 'the hallway'
+        else:
+            return str
 
     def move_up(self, character):
         loc = self.get_location(character)
@@ -135,3 +145,23 @@ class Board:
 
     def move_character(self, character, new_loc):
         self.char_locs[character] = new_loc
+
+    def move_player(self, character, direction):
+        curr_pos = self.char_locs[character]
+        if direction == 'up':
+            self.char_locs[character] = (curr_pos[0] - 1, curr_pos[1])
+        elif direction == 'down':
+            self.char_locs[character] = (curr_pos[0] + 1, curr_pos[1])
+        elif direction == 'left':
+            self.char_locs[character] = (curr_pos[0], curr_pos[1] - 1)
+        elif direction == 'right':
+            self.char_locs[character] = (curr_pos[0], curr_pos[1] + 1)
+        elif direction == 'secret':
+            x = 0
+            y = 0
+            if curr_pos[0] == 0:
+                x = 4
+            if curr_pos[1] == 0:
+                y = 4
+            new_pos = (x, y)
+            self.char_locs[character] = new_pos

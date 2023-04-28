@@ -51,15 +51,43 @@ Card._strings = {
     Card.MRS_PEACOCK: "Mrs. Peacock",
     Card.PROFESSOR_PLUM: "Professor Plum",
     Card.STUDY: "the Study",
-    Card.HALL: "The Hall",
-    Card.LOUNGE: "The Lounge",
-    Card.LIBRARY: "The Library",
-    Card.BILLIARD_ROOM: "The Billiard Room",
-    Card.DINING_ROOM: "The Dining Room",
-    Card.CONSERVATORY: "The Conservatory",
-    Card.BALLROOM: "The Ballroom",
-    Card.KITCHEN: "The Kitchen"
+    Card.HALL: "the Hall",
+    Card.LOUNGE: "the Lounge",
+    Card.LIBRARY: "the Library",
+    Card.BILLIARD_ROOM: "the Billiard Room",
+    Card.DINING_ROOM: "the Dining Room",
+    Card.CONSERVATORY: "the Conservatory",
+    Card.BALLROOM: "the Ballroom",
+    Card.KITCHEN: "the Kitchen"
 }
+
+card_strs = {
+    Card.CANDLESTICK: "The Candlestick",
+    Card.KNIFE: "The Knife",
+    Card.LEAD_PIPE: "The Lead Pipe",
+    Card.REVOLVER: "The Revolver",
+    Card.ROPE: "The Rope",
+    Card.WRENCH: "The Wrench",
+    Card.MISS_SCARLET: "Miss Scarlet",
+    Card.COLONEL_MUSTARD: "Colonel Mustard",
+    Card.MRS_WHITE: "Mrs. White",
+    Card.MR_GREEN: "Mr. Green",
+    Card.MRS_PEACOCK: "Mrs. Peacock",
+    Card.PROFESSOR_PLUM: "Professor Plum",
+    Card.STUDY: "the Study",
+    Card.HALL: "the Hall",
+    Card.LOUNGE: "the Lounge",
+    Card.LIBRARY: "the Library",
+    Card.BILLIARD_ROOM: "the Billiard Room",
+    Card.DINING_ROOM: "the Dining Room",
+    Card.CONSERVATORY: "the Conservatory",
+    Card.BALLROOM: "the Ballroom",
+    Card.KITCHEN: "the Kitchen"
+}
+
+card_map = {}
+for k, v in card_strs.items():
+    card_map[v] = k
 
 class Weapon(Enum):
     CANDLESTICK = 1
@@ -94,29 +122,29 @@ class Room(Enum):
 
 class Suggestion:
 
-    def __init__(self, weapon: Weapon, room: Room, character: Character, isAccusation: bool):
+    def __init__(self, weapon: Card, room: Card, character: Card, is_accusation: bool):
         self.weapon = weapon
         self.room = room
         self.character = character
-        self.isAccusation = isAccusation
+        self.is_accusation = is_accusation
+        self.card_set = {self.weapon, self.room, self.character}
+
 
     def equals(self, other):
         return self.weapon == other.weapon and self.room == other.room and self.character == other.character
 
-class Turn:
-    def __init__(self):
-        pass
-
 class Player:
 
-    def __init__(self, username, num, loc):
+    def __init__(self, username, sid, num, loc):
         self.username = username
-        self.character = Character(7 + num)
+        # Do we want this to be Card(7 + num)?
+        self.character = Card(7 + num)
+        self.sid = sid
         self.cards = []
-        self.prev_turn = []
-        self.curr_turn = []
         self.enabled = True
         self.loc = loc
+        self.last_suggested_room = None
+        self.removed = False
 
     def add_card(self, card):
         self.cards.append(card)
