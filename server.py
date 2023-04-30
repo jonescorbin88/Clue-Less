@@ -3,7 +3,7 @@ from flask_socketio import SocketIO, emit
 import game
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 class Server():
     def __init__(self):

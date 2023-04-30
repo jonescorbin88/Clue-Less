@@ -1,0 +1,161 @@
+div {
+  display: flex;
+  width: 100%;
+  background-color: white;
+  gap: 5px;
+}
+
+img {
+  height: 10vh;
+  margin-left: auto;
+}
+
+.container {
+  background-color: white;
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+ background-color: black;
+ flex: 1;
+ display: flex;
+ align-items: center;
+ max-height: 15vh;
+}
+
+.player-info {
+  background-color: white;
+  flex: 2;
+  display: flex;
+}
+
+.player-cards {
+  background-color: black;
+  flex: 2;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.player-char {
+  background-color: black;
+  flex: 1;
+  padding: 10px;
+}
+
+.console {
+  background-color: black;
+  height: 100vh;
+  flex: 3;
+  padding: 5px;
+}
+
+.board {
+  background-color: rgb(86, 80, 80);
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.row {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  gap: 0px;
+  background-color: rgb(86, 80, 80);
+  height:fit-content;
+}
+
+.room {
+  background-color: rgb(86, 80, 80);
+  border: 5px solid white;
+  width: 150px;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.passage {
+  background-color: black;
+  height: 40px;
+  width: 40px;
+  position: absolute;
+}
+
+.hallway1 {
+  width: 75px;
+  background-color: gainsboro;
+  height: 60px;
+  align-self: center;
+}
+
+.hallway2 {
+  width: 60px;
+  background-color: gainsboro;
+  height: 60px;
+  align-self: center;
+}
+
+.empty {
+  width: 175px;
+  background-color: rgb(86, 80, 80);
+  height: 50px;
+}
+
+.title {
+  color: white;
+  font-size: 100px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bold;
+}
+
+.subtitle {
+  color: gray;
+  font-size: 40px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.info {
+  color: white;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 30px;
+}
+
+.room-label {
+  color: white;
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 30px;
+  text-align: center;
+}
+
+#conservatory {
+  font-size: 24px;
+}
+
+#study-pass {
+  left: 110px;
+  top: 110px;
+}
+
+#lounge-pass {
+  right: 110px;
+  top: 110px;
+}
+
+#kitchen-pass {
+  right: 110px;
+  bottom: 110px;
+}
+
+#conserv-pass {
+  left: 110px;
+  bottom: 110px;
+}
+
