@@ -133,6 +133,7 @@ button {
   background-color: gainsboro;
   height: 60px;
   align-self: center;
+  position: relative;
 }
 
 .hallway2 {
@@ -140,6 +141,7 @@ button {
   background-color: gainsboro;
   height: 60px;
   align-self: center;
+  position: relative;
 }
 
 .empty {
@@ -186,6 +188,60 @@ button {
   text-align: center;
 }
 
+.miss-scarlett {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(255, 0, 0);
+  align-self: center;
+  position: relative;
+}
+
+.professor-plum {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(148, 0, 211);
+  align-self: center;
+  position: relative;
+}
+
+.colonel-mustard {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 0);
+  align-self: center;
+  position: relative;
+}
+
+.ms-peacock {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(0, 191, 255);
+  align-self: center;
+  position: relative;
+}
+
+.mr-green {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(0, 255, 0);
+  align-self: center;
+  position: relative;
+}
+
+.mrs-white {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: rgb(255, 255, 255);
+  align-self: center;
+  position: relative;
+}
+
 #conservatory {
   font-size: 24px;
 }
@@ -208,52 +264,4 @@ button {
 #conserv-pass {
   left: 110px;
   bottom: 110px;
-}
-
-#miss-scarlett {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  color: rgb(255, 0, 0);
-  align-self: center;
-}
-
-#professor-plum {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  color: rgb(148, 0, 211);
-  align-self: center;
-}
-
-#colonel-mustard {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  color: rgb(255, 255, 0);
-  align-self: center;
-}
-
-#ms-peacock {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  color: rgb(0, 191, 255);
-  align-self: center;
-}
-
-#mr-green {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  color: rgb(0, 255, 0);
-  align-self: center;
-}
-
-#mrs-white {
-  height: 25px;
-  width: 25px;
-  border-radius: 50%;
-  color: rgb(255, 255, 255);
-  align-self: center;
 }

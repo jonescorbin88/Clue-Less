@@ -14,18 +14,24 @@ class Board extends React.Component {
                     <div className="room">
                         <text className="room-label">Hall</text>
                     </div>
-                    <div className="hallway1"></div>
+                    <div className="hallway1">
+                        <div className="miss-scarlett"></div>
+                    </div>
                     <div className="room">
                         <div className="passage" id="lounge-pass"></div>
                         <text className="room-label">Lounge</text>
                     </div>
                 </div>
                 <div className="row">
-                    <div className="hallway2"></div>
+                    <div className="hallway2">
+                        <div className="professor-plum"></div>
+                    </div>
                     <div className="empty"></div>
                     <div className="hallway2"></div>
                     <div className="empty"></div>
-                    <div className="hallway2"></div>
+                    <div className="hallway2">
+                        <div className="colonel-mustard"></div>
+                    </div>
                 </div>
                 <div className="row">
                     <div className="room">
@@ -41,7 +47,9 @@ class Board extends React.Component {
                     </div>
                 </div>
                 <div className="row">
-                    <div className="hallway2"></div>
+                    <div className="hallway2">
+                        <div className="ms-peacock"></div>
+                    </div>
                     <div className="empty"></div>
                     <div className="hallway2"></div>
                     <div className="empty"></div>
@@ -52,11 +60,15 @@ class Board extends React.Component {
                         <text className="room-label" id="conservatory">Conservatory</text>
                         <div className="passage" id="conserv-pass"></div>
                     </div>
-                    <div className="hallway1"></div>
+                    <div className="hallway1">
+                        <div className="mr-green"></div>
+                    </div>
                     <div className="room">
                         <text className="room-label">Ballroom</text>
                     </div>
-                    <div className="hallway1"></div>
+                    <div className="hallway1">
+                        <div className="mrs-white"></div>
+                    </div>
                     <div className="room">
                         <text className="room-label">Kitchen</text>
                         <div className="passage" id="kitchen-pass"></div>
