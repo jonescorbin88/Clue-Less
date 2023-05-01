@@ -5,9 +5,36 @@ div {
   gap: 5px;
 }
 
-img {
+hr {
+  height: 2px;
+  width: 50vw;
+  background-color: white
+}
+
+button {
+  width: 15vw;
+  font-size: 25px;
+  color: white;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  background-color: rgb(86, 80, 80);
+  padding: 10px;
+  border: 3px solid white;
+}
+
+.img-main {
   height: 10vh;
   margin-left: auto;
+}
+
+.img-start {
+  height: 30vh;
+}
+
+.username {
+  width: 20vw;
+  font-size: 30px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  text-align: center;
 }
 
 .container {
@@ -15,6 +42,18 @@ img {
   flex: 7;
   display: flex;
   flex-direction: column;
+}
+
+.start-screen {
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  text-align: center;
 }
 
 .header {
@@ -128,6 +167,18 @@ img {
   font-size: 30px;
 }
 
+.error {
+  color: red;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 20px;
+}
+
+.info2 {
+  color: white;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 20px;
+}
+
 .room-label {
   color: white;
   font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -159,3 +210,50 @@ img {
   bottom: 110px;
 }
 
+#miss-scarlett {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: rgb(255, 0, 0);
+  align-self: center;
+}
+
+#professor-plum {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: rgb(148, 0, 211);
+  align-self: center;
+}
+
+#colonel-mustard {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: rgb(255, 255, 0);
+  align-self: center;
+}
+
+#ms-peacock {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: rgb(0, 191, 255);
+  align-self: center;
+}
+
+#mr-green {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: rgb(0, 255, 0);
+  align-self: center;
+}
+
+#mrs-white {
+  height: 25px;
+  width: 25px;
+  border-radius: 50%;
+  color: rgb(255, 255, 255);
+  align-self: center;
+}

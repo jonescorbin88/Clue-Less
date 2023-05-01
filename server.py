@@ -50,6 +50,7 @@ class Server():
             emit('server_msg', f'{self.usernames[request.sid]} has left the game.', broadcast=True)
             del self.usernames[request.sid]
         print(f'Client ({request.sid}) disconnected.')
+        emit('user_list', list(self.usernames.values()), broadcast=True)
 
     def emit_refuse(self, num, sid):
         if num == 1:
@@ -63,51 +64,49 @@ class Server():
     #     emit('message', {'message': data, 'user': self.usernames[request.sid]}, broadcast=True)
 
     def handle_add_username(self, username):
-        if username.isspace() or not username:
-            emit('username_request')
-        elif username in self.usernames.values():
-            emit('server_msg', 'Uh-oh! That username is already taken by another player.')
-            emit('username_request')
-        else:
-            self.usernames[request.sid] = username
-            emit('server_msg', f'{self.usernames[request.sid]} has entered the game.', broadcast=True)
-            emit('server_msg', f'Current players are: {", ".join(list(self.usernames.values()))}\n', broadcast=True)
+        self.usernames[request.sid] = username
+        print(username)
+        emit('user_list', list(self.usernames.values()), broadcast=True)
+        #emit('server_msg', f'{self.usernames[request.sid]} has entered the game.', broadcast=True)
+        #emit('server_msg', f'Current players are: {", ".join(list(self.usernames.values()))}\n', broadcast=True)
 
         if len(self.usernames) > 2:
             for sid in self.usernames.keys():
                 if sid not in self.confirmed:
                     emit('start_request', room=sid)
 
-    def start_game(self, res):
-        if res.upper().strip() != 'START':
-            emit('start_request')
-            return
+    def start_game(self):
+        # if res.upper().strip() != 'START':
+        #     emit('start_request')
+        #     return
  
-        self.confirmed.add(request.sid)
+        self.confirmed.add(self.usernames[request.sid])
         if len(self.confirmed) == len(self.usernames):
-            emit('server_msg', 'Starting game...', broadcast=True)
+            #emit('server_msg', 'Starting game...', broadcast=True)
             self.game = game.Game(self.usernames, self)
             self.game_started = True
-        else:
-            emit('server_msg', 'Great! Waiting for other players to confirm...')
+            emit('game_start', broadcast=True)
 
     def emit_game_intro(self):
-        text = '**********\nWelcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
-to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
-to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
-with what weapon, and in which room. But be careful, the murderer is still on the loose and \
-may strike again! Are you ready to put on your thinking cap and solve the mystery? \
-Let the game begin!\n**********\n'
-        emit('server_msg', self.map, broadcast=True)
-        emit('server_msg', text, broadcast=True)
+#         text = '**********\nWelcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
+# to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
+# to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
+# with what weapon, and in which room. But be careful, the murderer is still on the loose and \
+# may strike again! Are you ready to put on your thinking cap and solve the mystery? \
+# Let the game begin!\n**********\n'
+#         emit('server_msg', self.map, broadcast=True)
+#         emit('server_msg', text, broadcast=True)
+        pass
 
     def emit_new_turn(self, sid):
-        emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
+        #emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
+        pass
 
     def emit_setup(self, sid, char: str, loc: str, cards: list):
-        text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}.\n'
-        emit('server_msg', self.map, room=sid)
-        emit('server_msg', text, room=sid)
+        # text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}.\n'
+        # emit('server_msg', self.map, room=sid)
+        # emit('server_msg', text, room=sid)
+        pass
 
     def end_game(self):
         self.game = None
@@ -117,13 +116,14 @@ Let the game begin!\n**********\n'
     # Cards should be a list of strings
     # Options should be a list of strings (move character, make a suggestion, make an accusation)
     def request_action(self, sid, can_move, can_suggest):
-        options = []
-        if can_move:
-            options.append('Move your character')
-        if can_suggest:
-            options.append('Make a suggestion')
-        options.extend(('Make an accusation', 'End turn'))
-        emit('action_request', {'options': options}, room=sid)
+        # options = []
+        # if can_move:
+        #     options.append('Move your character')
+        # if can_suggest:
+        #     options.append('Make a suggestion')
+        # options.extend(('Make an accusation', 'End turn'))
+        # emit('action_request', {'options': options}, room=sid)
+        pass
 
     def handle_select_action(self, selection):
         if selection == 'Move your character':

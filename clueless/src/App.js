@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 import Main from './Main';
 
 const App = () => {
-  const [gameStart, setGameStart] = useState(true);
+  const [socket, setSocket] = useState(null);
   const [character, setCharacter] = useState("");
   const [cards, setCards] = useState([]);
   // Use spread syntax to update this
@@ -13,6 +13,7 @@ const App = () => {
 
   useEffect(() => {
     const socket = io('http://127.0.0.1:8081');
+    setSocket(socket);
 
     socket.on('connect', () => {
       console.log('Connected to server!');
@@ -25,7 +26,7 @@ const App = () => {
 
   return (
     <Main 
-      gameStart={gameStart}
+      socket={socket}
     />
   )
 };
