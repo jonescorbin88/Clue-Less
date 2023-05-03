@@ -1,62 +1,99 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import Draggable, {DraggableCore} from "react-draggable";
 
-function Action(props) {
-
+export function Action(props) {
     const [open, setOpen] = useState(false);
+    const [options, setOptions] = useState([]);
 
     useEffect(() => {
         if (props.socket) {
-            props.socket.on('server_msg', (msg) => {
-            
+            props.socket.on('action_request', (data) => {
+                setOptions(data.options);
+                setOpen(true);
             });
         }
     }, [props.socket]);
 
-    function handleClose() {
-        setOpen(false);
-    };
-
-    function getMessages() {
-        // let msgs = [];
-        // for (let msg of messages) {
-        //     msgs.push(<text className='console-msgs'>{msg}</text>);
-        //     msgs.push(<hr className='console-lines'/>);
-        // }
-        // return msgs;
+    function handleClick(opt) {
+        if (props.socket) {
+            props.socket.emit('select_action', opt);
+            setOpen(false);
+        }
     }
 
-    return (
-        <div className="centerpoint">
-        <Dialog 
-            open={open} 
-            onClose={handleClose} 
-            disableEnforceFocus
-            disableScrollLock
-        >
-            <DialogTitle>Subscribe</DialogTitle>
-            <DialogContent>
-            <DialogContentText>
-                To subscribe to this website, please enter your email address here. We
-                will send updates occasionally.
-            </DialogContentText>
-            {/* <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Email Address"
-                type="email"
-                fullWidth
-                variant="standard"
-            /> */}
-            </DialogContent>
-        </Dialog>
-        </div>
-    );
+    function getOptions() {
+        let opts = []
+        for (let opt of options) {
+            opts.push(<button 
+                        className='modal-button'
+                        onClick={() => handleClick(opt)}>
+                            {opt}
+                      </button>)
+        }
+        return opts
+    }
+
+    if (open) {
+        return ( 
+            <Draggable positionOffset={{ x: '-50%', y: '-50%' }}>
+                <div className='modal'>
+                    <div className='modal-head'>
+                        <text className='modal-title'>Select Action</text>
+                    </div>
+                    <div className='modal-body'>
+                        {getOptions()}
+                    </div>
+                </div>
+            </Draggable>
+        ) 
+    }
 }
 
-export default Action;
+export function Move(props) {
+    const [open, setOpen] = useState(true);
+    const [options, setOptions] = useState(['Test', 'Another', 'Cool']);
+
+    useEffect(() => {
+        if (props.socket) {
+            props.socket.on('move_request', (data) => {
+                setOptions(data.options);
+                setOpen(true);
+            });
+        }
+    }, [props.socket]);
+
+    function handleClick(opt) {
+        if (props.socket) {
+            props.socket.emit('select_movement', opt);
+            setOpen(false);
+        }
+    }
+
+    function getOptions() {
+        let opts = []
+        for (let opt of options) {
+            opts.push(<button 
+                        className='modal-button'
+                        onClick={() => handleClick(opt)}>
+                            {opt}
+                      </button>)
+        }
+        return opts
+    }
+
+    if (open) {
+        return ( 
+            <Draggable positionOffset={{ x: '-50%', y: '-50%' }}>
+                <div className='modal'>
+                    <div className='modal-head'>
+                        <text className='modal-title'>Select Movement</text>
+                    </div>
+                    <div className='modal-body'>
+                        {getOptions()}
+                    </div>
+                </div>
+            </Draggable>
+        ) 
+    }
+}

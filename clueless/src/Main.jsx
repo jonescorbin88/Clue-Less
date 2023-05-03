@@ -4,13 +4,14 @@ import logo from './group_logo.png';
 import Board from './Board';
 import Console from './Console';
 import StartScreen from './StartScreen';
-import Action from './Modals';
-import { StyledEngineProvider } from '@mui/material/styles';
+import { Action, Move } from './Modals';
 
 function Main(props) {
     const [gameStart, setGameStart] = useState(true);
     const [cards, setCards] = useState([]);
     const [character, setCharacter] = useState('Mrs. Peacock');
+    const [open, setOpen] = useState(true);
+    const [inputVal, setInputVal] = useState('test');
 
     useEffect(() => {
         if (props.socket) {
@@ -33,10 +34,16 @@ function Main(props) {
         return player_cards;
     }
 
+    const handleClose = () => {
+        setOpen(false);
+     };
+
     return (
         <div>
             {gameStart ? (
                 <React.Fragment>
+                    <Action socket={props.socket} />
+                    <Move socket={props.socket} />
                     <div className="container">
                         <div className="header">
                             <text className="title">CLUE-LESS</text>
