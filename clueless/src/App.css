@@ -78,10 +78,23 @@ button {
   padding: 10px;
 }
 
+.card-list {
+  display: flex;
+  flex-direction: column;
+  background-color: black;
+  align-items: center;
+}
+
 .player-char {
   background-color: black;
   flex: 1;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog {
+
 }
 
 .console {
@@ -89,6 +102,23 @@ button {
   height: 100vh;
   flex: 3;
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+  max-width: 30vw;
+  overflow: scroll;
+}
+
+.console-lines {
+  height: 1px;
+  width: 29vw;
+  background-color: rgb(148, 148, 148)
+}
+
+.console-msgs {
+  color: white;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 20px;
+  padding-left: 5px;
 }
 
 .board {
@@ -108,6 +138,7 @@ button {
   gap: 0px;
   background-color: rgb(86, 80, 80);
   height:fit-content;
+  overflow: visible;
 }
 
 .room {
@@ -130,7 +161,7 @@ button {
 
 .hallway1 {
   width: 75px;
-  background-color: gainsboro;
+  background-color: rgb(148, 148, 148);
   height: 60px;
   align-self: center;
   position: relative;
@@ -138,7 +169,7 @@ button {
 
 .hallway2 {
   width: 60px;
-  background-color: gainsboro;
+  background-color: rgb(148, 148, 148);
   height: 60px;
   align-self: center;
   position: relative;
@@ -194,7 +225,8 @@ button {
   border-radius: 50%;
   background-color: rgb(255, 0, 0);
   align-self: center;
-  position: relative;
+  position: absolute;
+  left: 18px;
 }
 
 .professor-plum {
@@ -203,7 +235,8 @@ button {
   border-radius: 50%;
   background-color: rgb(148, 0, 211);
   align-self: center;
-  position: relative;
+  position: absolute;
+  left: 10px;
 }
 
 .colonel-mustard {
@@ -212,7 +245,8 @@ button {
   border-radius: 50%;
   background-color: rgb(255, 255, 0);
   align-self: center;
-  position: relative;
+  position: absolute;
+  left: 10px;
 }
 
 .ms-peacock {
@@ -221,7 +255,8 @@ button {
   border-radius: 50%;
   background-color: rgb(0, 191, 255);
   align-self: center;
-  position: relative;
+  position: absolute;
+  left: 10px;
 }
 
 .mr-green {
@@ -230,7 +265,8 @@ button {
   border-radius: 50%;
   background-color: rgb(0, 255, 0);
   align-self: center;
-  position: relative;
+  position: absolute;
+  left: 18px;
 }
 
 .mrs-white {
@@ -239,7 +275,8 @@ button {
   border-radius: 50%;
   background-color: rgb(255, 255, 255);
   align-self: center;
-  position: relative;
+  position: absolute;
+  left: 18px;
 }
 
 #conservatory {
@@ -264,4 +301,20 @@ button {
 #conserv-pass {
   left: 110px;
   bottom: 110px;
+}
+
+.centerpoint {
+  top: 50%;
+  left: 50%;
+  position: absolute;
+}
+
+#dialog {
+  position: relative;
+
+  width: 600px;
+  margin-left: -300px;
+
+  height: 400px;
+  margin-top: -200px;
 }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Main from './Main';
+import Action from './Modals';
 
 const App = () => {
   const [socket, setSocket] = useState(null);

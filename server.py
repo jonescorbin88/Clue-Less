@@ -40,9 +40,7 @@ class Server():
         if self.game_started:
             self.emit_refuse(2, request.sid)
             return True
-        emit('server_msg', f'Welcome to Clue-Less! {self.num_clients} player(s) connected.')
         print(f'Client ({request.sid}) connected.')
-        emit('username_request')
 
     def handle_disconnect(self):
         self.num_clients -= 1
@@ -104,9 +102,9 @@ class Server():
 
     def emit_setup(self, sid, char: str, loc: str, cards: list):
         # text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}.\n'
-        # emit('server_msg', self.map, room=sid)
         # emit('server_msg', text, room=sid)
-        pass
+        emit('cards', cards, room=sid)
+        emit('character', char, room=sid)
 
     def end_game(self):
         self.game = None
