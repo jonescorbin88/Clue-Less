@@ -10,8 +10,6 @@ function Main(props) {
     const [gameStart, setGameStart] = useState(true);
     const [cards, setCards] = useState([]);
     const [character, setCharacter] = useState('Mrs. Peacock');
-    const [open, setOpen] = useState(true);
-    const [inputVal, setInputVal] = useState('test');
 
     useEffect(() => {
         if (props.socket) {
@@ -21,6 +19,10 @@ function Main(props) {
 
             props.socket.on('character', (character) => {
                 setCharacter(character);
+            });
+
+            props.socket.on('game_start', () => {
+                setGameStart(true);
             });
         }
     }, [props.socket]);
@@ -33,10 +35,6 @@ function Main(props) {
         }
         return player_cards;
     }
-
-    const handleClose = () => {
-        setOpen(false);
-     };
 
     return (
         <div>
