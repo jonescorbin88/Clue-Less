@@ -11,26 +11,6 @@ class Server():
         self.game_started = False
         self.usernames = {}
         self.confirmed = set()
-        self.map = '---------------     ---------------     ---------------\n\
-|             |     |             |     |             |\n\
-|    Study     -----      Hall     -----     Lounge   |\n\
-|              -----               -----              |\n\
-|             |     |             |     |             |\n\
-------   ------     ------   ------     ------   ------\n\
-     |   |               |   |               |    |    \n\
-------   ------     ------   ------     ------   ------\n\
-|             |     |             |     |             |\n\
-|   Library    -----    Billiard   -----     Dining   |\n\
-|              -----      Room     -----      Room    |\n\
-|             |     |             |     |             |\n\
-------   ------     ------   ------     ------   ------\n\
-     |   |               |   |               |    |    \n\
-------   ------     ------   ------     ------   ------\n\
-|             |     |             |     |             |\n\
-| Conservatory -----    Ballroom   -----    Kitchen   |\n\
-|              -----               -----              |\n\
-|             |     |             |     |             |\n\
----------------     ---------------     ---------------\n'
 
     def handle_connect(self):
         self.num_clients += 1
@@ -63,7 +43,6 @@ class Server():
 
     def handle_add_username(self, username):
         self.usernames[request.sid] = username
-        print(username)
         emit('user_list', list(self.usernames.values()), broadcast=True)
         #emit('server_msg', f'{self.usernames[request.sid]} has entered the game.', broadcast=True)
         #emit('server_msg', f'Current players are: {", ".join(list(self.usernames.values()))}\n', broadcast=True)
@@ -86,19 +65,16 @@ class Server():
             emit('game_start', broadcast=True)
 
     def emit_game_intro(self):
-#         text = '**********\nWelcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
-# to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
-# to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
-# with what weapon, and in which room. But be careful, the murderer is still on the loose and \
-# may strike again! Are you ready to put on your thinking cap and solve the mystery? \
-# Let the game begin!\n**********\n'
-#         emit('server_msg', self.map, broadcast=True)
-#         emit('server_msg', text, broadcast=True)
-        pass
+        text = 'Welcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
+to immerse yourself in a thrilling murder mystery where you\'ll need to use your detective skills \
+to solve the crime. Explore the luxurious mansion and gather clues to figure out who did it, \
+with what weapon, and in which room. But be careful, the murderer is still on the loose and \
+may strike again! Are you ready to put on your thinking cap and solve the mystery? \
+Let the game begin!'
+        emit('server_msg', text, broadcast=True)
 
     def emit_new_turn(self, sid):
-        #emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
-        pass
+        emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
 
     def emit_setup(self, sid, char: str, loc: str, cards: list):
         # text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}.\n'
@@ -114,14 +90,13 @@ class Server():
     # Cards should be a list of strings
     # Options should be a list of strings (move character, make a suggestion, make an accusation)
     def request_action(self, sid, can_move, can_suggest):
-        # options = []
-        # if can_move:
-        #     options.append('Move your character')
-        # if can_suggest:
-        #     options.append('Make a suggestion')
-        # options.extend(('Make an accusation', 'End turn'))
-        # emit('action_request', {'options': options}, room=sid)
-        pass
+        options = []
+        if can_move:
+            options.append('Move your character')
+        if can_suggest:
+            options.append('Make a suggestion')
+        options.extend(('Make an accusation', 'End turn'))
+        emit('action_request', {'options': options}, room=sid)
 
     def handle_select_action(self, selection):
         if selection == 'Move your character':

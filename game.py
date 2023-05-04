@@ -170,13 +170,13 @@ class Game:
             self.moved = False
             self.suggested = False
             self.server.emit_new_turn(self.cur_player.sid)
-            cards = []
-            for card in self.cur_player.cards:
-                cards.append(card.get_str())
-            self.server.emit_setup(self.cur_player.sid, 
-                                   self.cur_player.character.get_str(), 
-                                   self.board.get_room_str(self.cur_player.loc), 
-                                   cards)
+            # cards = []
+            # for card in self.cur_player.cards:
+            #     cards.append(card.get_str())
+            # self.server.emit_setup(self.cur_player.sid, 
+            #                        self.cur_player.character.get_str(), 
+            #                        self.board.get_room_str(self.cur_player.loc), 
+            #                        cards)
             # Call to the server to prompt with actions
             self.get_actions()
             

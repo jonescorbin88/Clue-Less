@@ -4,7 +4,7 @@ import logo from './group_logo.png';
 import Board from './Board';
 import Console from './Console';
 import StartScreen from './StartScreen';
-import { Action, Move } from './Modals';
+import { Action, Move, Suggestion, Accusation, Disprove } from './Modals';
 
 function Main(props) {
     const [gameStart, setGameStart] = useState(true);
@@ -44,6 +44,9 @@ function Main(props) {
                 <React.Fragment>
                     <Action socket={props.socket} />
                     <Move socket={props.socket} />
+                    <Suggestion socket={props.socket} />
+                    <Accusation socket={props.socket} />
+                    <Disprove socket={props.socket} />
                     <div className="container">
                         <div className="header">
                             <text className="title">CLUE-LESS</text>
