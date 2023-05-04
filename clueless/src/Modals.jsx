@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Draggable, {DraggableCore} from "react-draggable";
+import Draggable from "react-draggable";
 
 export function Action(props) {
     const [open, setOpen] = useState(false);
@@ -101,7 +101,7 @@ export function Move(props) {
 export function Suggestion(props) {
     const [open, setOpen] = useState(false);
     const [character, setCharacter] = useState('Miss Scarlet');
-    const [weapon, setWeapon] = useState('The CandleStick');
+    const [weapon, setWeapon] = useState('The Candlestick');
 
     useEffect(() => {
         if (props.socket) {
@@ -164,7 +164,7 @@ export function Suggestion(props) {
 export function Accusation(props) {
     const [open, setOpen] = useState(false);
     const [character, setCharacter] = useState('Miss Scarlet');
-    const [weapon, setWeapon] = useState('The CandleStick');
+    const [weapon, setWeapon] = useState('The Candlestick');
     const [room, setRoom] = useState('Study')
     
     useEffect(() => {
@@ -215,15 +215,15 @@ export function Accusation(props) {
                         <label class="info" for="room">Choose a Room:</label>
                         <div className = 'suggest'>                           
                             <select name = "room" id = "room" onChange={(e) => setRoom(e.target.value)}>
-                                <option value = "Study">Study</option> 
-                                <option value = "Hall">Hall</option>
-                                <option value = "Lounge">Lounge</option>
-                                <option value = "Library">Library</option>
-                                <option value = "Billiard Room">Billiard Room</option>
-                                <option value = "Dining Room">Dining Room</option>
-                                <option value = "Conservatory">Conservatory</option>
-                                <option value = "Ballroom">Ballroom</option>
-                                <option value = "Kitchen">Kitchen</option>
+                                <option value = "the Study">Study</option> 
+                                <option value = "the Hall">Hall</option>
+                                <option value = "the Lounge">Lounge</option>
+                                <option value = "the Library">Library</option>
+                                <option value = "the Billiard Room">Billiard Room</option>
+                                <option value = "the Dining Room">Dining Room</option>
+                                <option value = "the Conservatory">Conservatory</option>
+                                <option value = "the Ballroom">Ballroom</option>
+                                <option value = "the Kitchen">Kitchen</option>
                             </select>
                         </div>
                         <spacer style={{height: '3px'}} />
@@ -252,7 +252,6 @@ export function Disprove(props) {
 
     function handleClick() {
         if (props.socket) {
-            console.log(card);
             props.socket.emit('select_disprove', card);
             setOpen(false);
         }
@@ -261,7 +260,7 @@ export function Disprove(props) {
     function getOptions() {
         let opts = []
         for (let opt of options) {
-            opts.push(<option value={opt}>{opt}</option>)
+            opts.push(<option value={opt}>{opt.charAt(0).toUpperCase() + opt.slice(1)}</option>)
         }
         return opts
     }

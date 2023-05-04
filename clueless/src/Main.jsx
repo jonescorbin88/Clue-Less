@@ -7,9 +7,9 @@ import StartScreen from './StartScreen';
 import { Action, Move, Suggestion, Accusation, Disprove } from './Modals';
 
 function Main(props) {
-    const [gameStart, setGameStart] = useState(true);
+    const [gameStart, setGameStart] = useState(false);
     const [cards, setCards] = useState([]);
-    const [character, setCharacter] = useState('Mrs. Peacock');
+    const [character, setCharacter] = useState("");
 
     useEffect(() => {
         if (props.socket) {
@@ -24,6 +24,10 @@ function Main(props) {
             props.socket.on('game_start', () => {
                 setGameStart(true);
             });
+
+            props.socket.on('disconnect', () => {
+                setGameStart(false);
+            });
         }
     }, [props.socket]);
 
@@ -31,7 +35,7 @@ function Main(props) {
         let player_cards = [];
         const card_slice = cards.slice(min, max);
         for (let card of card_slice) {
-            player_cards.push(<text className='info'>{card}</text>);
+            player_cards.push(<text className='info'>{card.charAt(0).toUpperCase() + card.slice(1)}</text>);
         }
         return player_cards;
     }

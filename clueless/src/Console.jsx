@@ -2,14 +2,21 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function Console(props) {
-    const [messages, setMessages] = useState(['Test', 'Another', 'Hello'])
+    const [messages, setMessages] = useState([]);
+    console.log(messages);
 
     useEffect(() => {
         if (props.socket) {
-            props.socket.on('server_msg', (msg) => {
-                const newMsgs = [...messages, msg];
-                setMessages(newMsgs);
-            });
+            function onMessage(msg) {
+                setMessages(prev => [...prev, msg]);
+                console.log(msg);
+            }
+
+            props.socket.on('server_msg', onMessage);
+            
+            return () => {
+                props.socket.off('server_msg', onMessage);
+            };
         }
     }, [props.socket]);
 

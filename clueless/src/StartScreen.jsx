@@ -7,19 +7,34 @@ function StartScreen(props) {
     const [inGame, setInGame] = useState(false);
     const [invalid, setInvalid] = useState(false);
     const [invalidMsg, setInvalidMsg] = useState('');
-    const [usernames, setUsernames] = useState([])
-    const [askStart, setAskStart] = useState(false)
-    const [confirm, setConfirm] = useState(false)
+    const [usernames, setUsernames] = useState([]);
+    const [askStart, setAskStart] = useState(false);
+    const [confirm, setConfirm] = useState(false);
 
     useEffect(() => {
         if (props.socket) {
-            props.socket.on('user_list', (users) => {
+            function onUserList(users) {
                 setUsernames(users);
-            });
+            }
 
-            props.socket.on('start_request', () => {
+            function onAskStart() {
                 setAskStart(true);
-            });
+            }
+
+            props.socket.on('user_list', onUserList);
+            props.socket.on('start_request', onAskStart);
+            // props.socket.on('user_list', (users) => {
+            //     setUsernames(users);
+            //     setTest([...test, users[0]]);
+            // });
+
+            // props.socket.on('start_request', () => {
+            //     setAskStart(true);
+            // });
+            return () => {
+                props.socket.off('user_list', onUserList);
+                props.socket.off('start_request', onAskStart);
+            };
         }
     }, [props.socket]);
 
