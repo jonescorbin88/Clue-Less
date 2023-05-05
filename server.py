@@ -60,9 +60,9 @@ class Server():
         self.confirmed.add(self.usernames[request.sid])
         if len(self.confirmed) == len(self.usernames):
             #emit('server_msg', 'Starting game...', broadcast=True)
+            emit('game_start', broadcast=True)
             self.game = game.Game(self.usernames, self)
             self.game_started = True
-            emit('game_start', broadcast=True)
 
     def emit_game_intro(self):
         text = 'Welcome to Clue-Less, a digital version of the classic board game Clue! Get ready \
