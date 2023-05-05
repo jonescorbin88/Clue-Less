@@ -1,5 +1,5 @@
 from flask import Flask, request
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 import game
 
 app = Flask(__name__)
@@ -25,10 +25,10 @@ class Server():
     def handle_disconnect(self):
         self.num_clients -= 1
         if request.sid in self.usernames.keys():
-            emit('server_msg', f'{self.usernames[request.sid]} has left the game.', broadcast=True)
+            emit('server_msg', f'{self.usernames[request.sid]} has left the game.', room='game_room')
             del self.usernames[request.sid]
         print(f'Client ({request.sid}) disconnected.')
-        emit('user_list', list(self.usernames.values()), broadcast=True)
+        emit('user_list', list(self.usernames.values()), room='game_room')
 
     def emit_refuse(self, num, sid):
         if num == 1:
@@ -37,13 +37,13 @@ class Server():
             emit('server_msg', 'Sorry! A game has already started. Please try again later.')
         emit('conn_refuse')
 
-    # def handle_message(self, data):
-    #     print(f'Received message from {self.usernames[request.sid]}: ' + data)
-    #     emit('message', {'message': data, 'user': self.usernames[request.sid]}, broadcast=True)
+    def handle_message(self, msg):
+        emit('server_msg', f'{self.usernames[request.sid]}: {msg}', room='game_room')
 
     def handle_add_username(self, username):
         self.usernames[request.sid] = username
-        emit('user_list', list(self.usernames.values()), broadcast=True)
+        join_room('game_room')
+        emit('user_list', list(self.usernames.values()), room='game_room')
         #emit('server_msg', f'{self.usernames[request.sid]} has entered the game.', broadcast=True)
         #emit('server_msg', f'Current players are: {", ".join(list(self.usernames.values()))}\n', broadcast=True)
 
@@ -60,7 +60,7 @@ class Server():
         self.confirmed.add(self.usernames[request.sid])
         if len(self.confirmed) == len(self.usernames):
             #emit('server_msg', 'Starting game...', broadcast=True)
-            emit('game_start', broadcast=True)
+            emit('game_start', room='game_room')
             self.game = game.Game(self.usernames, self)
             self.game_started = True
 
@@ -71,10 +71,10 @@ to solve the crime. Explore the luxurious mansion and gather clues to figure out
 with what weapon, and in which room. But be careful, the murderer is still on the loose and \
 may strike again! Are you ready to put on your thinking cap and solve the mystery? \
 Let the game begin!'
-        emit('server_msg', text, broadcast=True)
+        emit('server_msg', text, room='game_room')
 
     def emit_new_turn(self, sid):
-        emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', broadcast=True)
+        emit('server_msg', f'It\'s {self.usernames[sid]}\'s turn!', room='game_room')
 
     def emit_setup(self, sid, char: str, loc: str, cards: list):
         # text = f'Your character is: {char}.\nYour cards are: {", ".join(cards)}\nYou are currently located in {loc}.\n'
@@ -145,20 +145,20 @@ Let the game begin!'
         self.game.make_accusation(suspect, weapon, room)
 
     def emit_movement(self, sid, character, location):
-        emit('server_msg', f'{self.usernames[sid]} has moved {character} to {location}', broadcast=True)
+        emit('server_msg', f'{self.usernames[sid]} has moved {character} to {location}.', room='game_room')
         
     def emit_suggestion(self, sid, suspect, weapon, room):
-        emit('server_msg', f'{self.usernames[sid]} has suggested {suspect}, in {room}, with {weapon}', broadcast=True)
+        emit('server_msg', f'{self.usernames[sid]} has suggested {suspect}, in {room}, with {weapon}.', room='game_room')
 
     def emit_accusation(self, sid, suspect, weapon, room):
-        emit('server_msg', f'{self.usernames[sid]} has accused {suspect}, in {room}, with {weapon}', broadcast=True)
+        emit('server_msg', f'{self.usernames[sid]} has accused {suspect}, in {room}, with {weapon}.', room='game_room')
 
     def emit_disprove(self, sid_disprove, sid_sugg):
-        emit('server_msg', f'{self.usernames[sid_disprove]} has disproved the suggestion made by {self.usernames[sid_sugg]}.', broadcast=True)
+        emit('server_msg', f'{self.usernames[sid_disprove]} has disproved the suggestion made by {self.usernames[sid_sugg]}.', room='game_room')
         self.game.get_actions()
 
     def emit_no_disprove(self, sid_sugg):
-        emit('server_msg', f'Mysterious! No one can disprove the suggestion made by {self.usernames[sid_sugg]}.', broadcast=True)
+        emit('server_msg', f'Mysterious! No one can disprove the suggestion made by {self.usernames[sid_sugg]}.', room='game_room')
         self.game.get_actions()
 
     def emit_winner(self, sid, suspect, weapon, room):
@@ -166,7 +166,7 @@ Let the game begin!'
         text = f'{winner} has guessed the case file correctly and won the game. Bravo!\n\
 {winner} determined that {suspect} committed the crime, with {weapon}, in {room}.\n\
 Thanks for playing!'
-        emit('server_msg', text, broadcast=True)
+        emit('server_msg', text, room='game_room')
 
     # Cards should be a list of strings
     def emit_loser(self, sid):
@@ -174,7 +174,7 @@ Thanks for playing!'
         text = f'Unfortunately, {loser} failed to guess the case file correctly. \
 They will be removed from the game. It\'s up to the remaining players to solve the mystery \
 before it\'s too late!\n'
-        emit('server_msg', text, broadcast=True)
+        emit('server_msg', text, room='game_room')
 
 def create_server():
     # Create single instance of server
@@ -192,7 +192,7 @@ def create_server():
     socketio.on('select_sugg')(server.handle_suggestion)
     socketio.on('select_disprove')(server.handle_disprove)
     socketio.on('select_acc')(server.handle_accusation)
-
+    socketio.on('player_msg')(server.handle_message)
     return server
 
 # Port thing might be an issue. We will have to make sure that the server is using a port that isn't already taken.

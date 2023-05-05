@@ -3,6 +3,7 @@ import './App.css';
 
 function Console(props) {
     const [messages, setMessages] = useState([]);
+    const [msg, setMsg] = useState("");
     console.log(messages);
 
     useEffect(() => {
@@ -29,9 +30,21 @@ function Console(props) {
         return msgs;
     }
 
+    function handleClick() {
+        props.socket.emit('player_msg', msg);
+        setMsg("");
+    }
+
     return (
         <div className="console">
             {getMessages()}
+            <div className='user-msg'>
+                <input 
+                    className='user-msg-input' 
+                    onInput={e => setMsg(e.target.value)}
+                />
+                <button className='msg-send' onClick={handleClick}>Send</button>
+            </div>
         </div>
     );
 }
