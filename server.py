@@ -144,8 +144,9 @@ Let the game begin!'
     def handle_accusation(self, suspect, room, weapon):
         self.game.make_accusation(suspect, weapon, room)
 
-    def emit_movement(self, sid, character, location):
+    def emit_movement(self, sid, character, location, coords):
         emit('server_msg', f'{self.usernames[sid]} has moved {character} to {location}.', room='game_room')
+        emit('make_move', {'char': character, 'coords':coords})
         
     def emit_suggestion(self, sid, suspect, weapon, room):
         emit('server_msg', f'{self.usernames[sid]} has suggested {suspect}, in {room}, with {weapon}.', room='game_room')

@@ -101,7 +101,8 @@ class Game:
         self.moved = True
         self.server.emit_movement(self.cur_player.sid, 
                            self.cur_player.character.get_str(),
-                           self.board.get_room_str(self.cur_player.loc))
+                           self.board.get_room_str(self.cur_player.loc),
+                           self.cur_player.loc)
         self.get_actions()
 
     # Make suggestion

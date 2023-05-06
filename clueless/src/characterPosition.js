@@ -1,0 +1,4 @@
+function moveLogic(character, move) {
+
+    
+}
