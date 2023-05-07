@@ -14,7 +14,6 @@ function Board(props) {
         left: '57.7%',
         top: '12%',
         zIndex: 998,
-        writable: true,
     };
 
     var professorPlumStyle = {
@@ -26,7 +25,6 @@ function Board(props) {
         left: '29.5%',
         top: '30%',
         zIndex: 998,
-        writable: true,
     };
       
     var colonelMustardStyle = {
@@ -38,7 +36,6 @@ function Board(props) {
         left: '67.4%',
         top: '30%',
         zIndex: 998,
-        writable: true,
     };
       
     var msPeacockStyle = {
@@ -50,7 +47,6 @@ function Board(props) {
         left: '29.5%',
         top: '64%',
         zIndex: 998,
-        writable: true,
     };
       
     var mrGreenStyle = {
@@ -62,7 +58,6 @@ function Board(props) {
         left: '39%',
         top: '81%',
         zIndex: 998,
-        writable: true,
     };
       
     var mrsWhiteStyle = {
@@ -74,180 +69,237 @@ function Board(props) {
         left: '57.7%',
         top: '81%',
         zIndex: 998,
-        writable: true,
     };
+
+    const [scarletStyle, setScarletStyle] = useState(missScarletStyle);
+    const [plumStyle, setPlumStyle] = useState(professorPlumStyle);
+    const [mustardStyle, setMustardStyle] = useState(colonelMustardStyle);
+    const [peacockStyle, setPeacockStyle] = useState(msPeacockStyle);
+    const [greenStyle, setGreenStyle] = useState(mrGreenStyle);
+    const [whiteStyle, setWhiteStyle] = useState(mrsWhiteStyle);
 
     useEffect(() => {
         if (props.socket) {
             props.socket.on('make_move', (data) => {
                 if (data.char == 'Miss Scarlet') {
                     if ( data.coord[0] == 0 ) {
-                        missScarletStyle.top = '12%';
-                        // copy = Object.assign({},missScarletStyle); //.top = '12%';
-                        // copy.top = '12%'
+                        //missScarletStyle.top = '12%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, top: '12%' }));
                     } else if ( data.coord[0] == 1 ) {
-                        missScarletStyle.top = '30%';
+                        //missScarletStyle.top = '30%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, top: '30%' }));
                     } else if ( data.coord[0] == 2 ) {
-                        missScarletStyle.top = '47%';
+                        //missScarletStyle.top = '47%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, top: '47%' }));
                     } else if ( data.coord[0] == 3 ) {
-                        missScarletStyle.top = '64%';
+                        //missScarletStyle.top = '64%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, top: '64%' }));
                     } else if ( data.coord[0] == 4 ) {
-                        missScarletStyle.top = '81%';
+                        //missScarletStyle.top = '81%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, top: '81%' }));
                     }
 
                     if ( data.coord[1] == 0 ) {
-                        missScarletStyle.left = '29%';
+                        //missScarletStyle.left = '29%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, left: '29.5%' }));
                     } else if ( data.coord[1] == 1 ) {
-                        missScarletStyle.left = '39%';
+                        //missScarletStyle.left = '39%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, left: '39%' }));
                     } else if ( data.coord[1] == 2 ) {
-                        missScarletStyle.left = '48.5%';
+                        //missScarletStyle.left = '48.5%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, left: '48.5%' }));
                     } else if ( data.coord[1] == 3 ) {
-                        missScarletStyle.left = '57.7%';
+                        //missScarletStyle.left = '57.7%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, left: '57.7%' }));
                     } else if ( data.coord[1] == 4 ) {
-                        missScarletStyle.left = '67.4%';
+                        //missScarletStyle.left = '67.4%';
+                        setScarletStyle((scarletStyle) => ({ ...scarletStyle, left: '67.4%' }));
                     }
                 } else if (data.char == 'Professor Plum') {
                     if ( data.coord[0] == 0 ) {
-                        professorPlumStyle.top = '12%';
+                        //missScarletStyle.top = '12%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, top: '12%' }));
                     } else if ( data.coord[0] == 1 ) {
-                        professorPlumStyle.top = '30%';
+                        //missScarletStyle.top = '30%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, top: '30%' }));
                     } else if ( data.coord[0] == 2 ) {
-                        professorPlumStyle.top = '47%';
+                        //missScarletStyle.top = '47%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, top: '47%' }));
                     } else if ( data.coord[0] == 3 ) {
-                        professorPlumStyle.top = '64%';
+                        //missScarletStyle.top = '64%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, top: '64%' }));
                     } else if ( data.coord[0] == 4 ) {
-                        professorPlumStyle.top = '81%';
+                        //missScarletStyle.top = '81%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, top: '81%' }));
                     }
 
                     if ( data.coord[1] == 0 ) {
-                        professorPlumStyle.left = '29%';
+                        //missScarletStyle.left = '29%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, left: '29.5%' }));
                     } else if ( data.coord[1] == 1 ) {
-                        professorPlumStyle.left = '39%';
+                        //missScarletStyle.left = '39%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, left: '39%' }));
                     } else if ( data.coord[1] == 2 ) {
-                        professorPlumStyle.left = '48.5%';
+                        //missScarletStyle.left = '48.5%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, left: '48.5%' }));
                     } else if ( data.coord[1] == 3 ) {
-                        professorPlumStyle.left = '57.7%';
+                        //missScarletStyle.left = '57.7%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, left: '57.7%' }));
                     } else if ( data.coord[1] == 4 ) {
-                        professorPlumStyle.left = '67.4%';
+                        //missScarletStyle.left = '67.4%';
+                        setPlumStyle((plumStyle) => ({ ...plumStyle, left: '67.4%' }));
                     }
                 } else if (data.char == 'Colonel Mustard') {
                     if ( data.coord[0] == 0 ) {
-                        colonelMustardStyle.top = '12%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, top:'12%'}));
                     } else if ( data.coord[0] == 1 ) {
-                        colonelMustardStyle.top = '30%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, top:'30%'}));
                     } else if ( data.coord[0] == 2 ) {
-                        colonelMustardStyle.top = '47%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, top:'47%'}));
                     } else if ( data.coord[0] == 3 ) {
-                        colonelMustardStyle.top = '64%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, top:'64%'}));
                     } else if ( data.coord[0] == 4 ) {
-                        colonelMustardStyle.top = '81%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, top:'81%'}));
                     }
 
                     if ( data.coord[1] == 0 ) {
-                        colonelMustardStyle.left = '29%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, left: '29.5%'}));
                     } else if ( data.coord[1] == 1 ) {
-                        colonelMustardStyle.left = '39%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, left: '39%'}));
                     } else if ( data.coord[1] == 2 ) {
-                        colonelMustardStyle.left = '48.5%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, left: '48.5%'}));
                     } else if ( data.coord[1] == 3 ) {
-                        colonelMustardStyle.left = '57.7%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, left: '57.7%'}));
                     } else if ( data.coord[1] == 4 ) {
-                        colonelMustardStyle.left = '67.4%';
+                        setMustardStyle((mustardStyle) => ({...mustardStyle, left: '67.4%'}));
                     }
                 } else if (data.char == 'Ms. Peacock') {
                     if ( data.coord[0] == 0 ) {
-                        msPeacockStyle.top = '12%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, top: '12%'}));
                     } else if ( data.coord[0] == 1 ) {
-                        msPeacockStyle.top = '30%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, top: '30%'}));
                     } else if ( data.coord[0] == 2 ) {
-                        msPeacockStyle.top = '47%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, top: '47%'}));
                     } else if ( data.coord[0] == 3 ) {
-                        msPeacockStyle.top = '64%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, top: '64%'}));
                     } else if ( data.coord[0] == 4 ) {
-                        msPeacockStyle.top = '81%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, top: '81%'}));
                     }
 
                     if ( data.coord[1] == 0 ) {
-                        msPeacockStyle.left = '29%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, left: '29.5%'}));
                     } else if ( data.coord[1] == 1 ) {
-                        msPeacockStyle.left = '39%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, left: '39%'}));
                     } else if ( data.coord[1] == 2 ) {
-                        msPeacockStyle.left = '48.5%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, left: '48.5%'}));
                     } else if ( data.coord[1] == 3 ) {
-                        msPeacockStyle.left = '57.7%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, left: '57.7%'}));
                     } else if ( data.coord[1] == 4 ) {
-                        msPeacockStyle.left = '67.4%';
+                        setPeacockStyle((peacockStyle) => ({...peacockStyle, left: '67.4%'}));
                     }
                 } else if (data.char == 'Mr. Green') {
                     if ( data.coord[0] == 0 ) {
-                        mrGreenStyle.top = '12%';
+                        //missScarletStyle.top = '12%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, top: '12%' }));
                     } else if ( data.coord[0] == 1 ) {
-                        mrGreenStyle.top = '30%';
+                        //missScarletStyle.top = '30%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, top: '30%' }));
                     } else if ( data.coord[0] == 2 ) {
-                        mrGreenStyle.top = '47%';
+                        //missScarletStyle.top = '47%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, top: '47%' }));
                     } else if ( data.coord[0] == 3 ) {
-                        mrGreenStyle.top = '64%';
+                        //missScarletStyle.top = '64%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, top: '64%' }));
                     } else if ( data.coord[0] == 4 ) {
-                        mrGreenStyle.top = '81%';
+                        //missScarletStyle.top = '81%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, top: '81%' }));
                     }
 
                     if ( data.coord[1] == 0 ) {
-                        mrGreenStyle.left = '29%';
+                        //missScarletStyle.left = '29%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, left: '29.5%' }));
                     } else if ( data.coord[1] == 1 ) {
-                        mrGreenStyle.left = '39%';
+                        //missScarletStyle.left = '39%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, left: '39%' }));
                     } else if ( data.coord[1] == 2 ) {
-                        mrGreenStyle.left = '48.5%';
+                        //missScarletStyle.left = '48.5%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, left: '48.5%' }));
                     } else if ( data.coord[1] == 3 ) {
-                        mrGreenStyle.left = '57.7%';
+                        //missScarletStyle.left = '57.7%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, left: '57.7%' }));
                     } else if ( data.coord[1] == 4 ) {
-                        mrGreenStyle.left = '67.4%';
+                        //missScarletStyle.left = '67.4%';
+                        setGreenStyle((greenStyle) => ({ ...greenStyle, left: '67.4%' }));
                     }
                 } else if (data.char == 'Mrs. White') {
                     if ( data.coord[0] == 0 ) {
-                        mrsWhiteStyle.top = '12%';
+                        //missScarletStyle.top = '12%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, top: '12%' }));
                     } else if ( data.coord[0] == 1 ) {
-                        mrsWhiteStyle.top = '30%';
+                        //missScarletStyle.top = '30%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, top: '30%' }));
                     } else if ( data.coord[0] == 2 ) {
-                        mrsWhiteStyle.top = '47%';
+                        //missScarletStyle.top = '47%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, top: '47%' }));
                     } else if ( data.coord[0] == 3 ) {
-                        mrsWhiteStyle.top = '64%';
+                        //missScarletStyle.top = '64%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, top: '64%' }));
                     } else if ( data.coord[0] == 4 ) {
-                        mrsWhiteStyle.top = '81%';
+                        //missScarletStyle.top = '81%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, top: '81%' }));
                     }
 
                     if ( data.coord[1] == 0 ) {
-                        mrsWhiteStyle.left = '29%';
+                        //missScarletStyle.left = '29%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, left: '29.5%' }));
                     } else if ( data.coord[1] == 1 ) {
-                        mrsWhiteStyle.left = '39%';
+                        //missScarletStyle.left = '39%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, left: '39%' }));
                     } else if ( data.coord[1] == 2 ) {
-                        mrsWhiteStyle.left = '48.5%';
+                        //missScarletStyle.left = '48.5%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, left: '48.5%' }));
                     } else if ( data.coord[1] == 3 ) {
-                        mrsWhiteStyle.left = '57.7%';
+                        //missScarletStyle.left = '57.7%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, left: '57.7%' }));
                     } else if ( data.coord[1] == 4 ) {
-                        mrsWhiteStyle.left = '67.4%';
+                        //missScarletStyle.left = '67.4%';
+                        setWhiteStyle((whiteStyle) => ({ ...whiteStyle, left: '67.4%' }));
                     }
                 }
-                if (data.coord[0] == 0 || data.coord[0] == 2 || data.coord[0] == 4 ||
-                     data.coord[1] == 0 || data.coord[1] == 2 || data.coord[1] == 4) {
+                if ((data.coord[0] == 0 || data.coord[0] == 2 || data.coord[0] == 4) &&
+                     (data.coord[1] == 0 || data.coord[1] == 2 || data.coord[1] == 4)) {
                         if (data.char == 'Miss Scarlet') {
-                            missScarletStyle.left = 'calc(' + missScarletStyle.left + ' - 50px)';
-                            missScarletStyle.top = 'calc(' + missScarletStyle.top + ' - 50px)';
+                            //missScarletStyle.left = 'calc(' + missScarletStyle.left + ' - 50px)';
+                            //missScarletStyle.top = 'calc(' + missScarletStyle.top + ' - 50px)';
+                            setScarletStyle((scarletStyle) => ({ ...scarletStyle, left: 'calc(' + scarletStyle.left + ' - 50px)' }));
+                            setScarletStyle((scarletStyle) => ({ ...scarletStyle, top: 'calc(' + scarletStyle.top + ' - 50px)' }));
                         } else if (data.char == 'Professor Plum') {
-                            professorPlumStyle.left = 'calc(' + professorPlumStyle.left + ' + 0px)';
-                            professorPlumStyle.top = 'calc(' + professorPlumStyle.top + ' - 50px)';
+                            //professorPlumStyle.left = 'calc(' + professorPlumStyle.left + ' + 0px)';
+                            //professorPlumStyle.top = 'calc(' + professorPlumStyle.top + ' - 50px)';
+                            setPlumStyle((plumStyle) => ({ ...plumStyle, left: 'calc(' + plumStyle.left + ' + 0px)' }));
+                            setPlumStyle((plumStyle) => ({ ...plumStyle, top: 'calc(' + plumStyle.top + ' - 50px)' }));
                         } else if (data.char == 'Colonel Mustard') {
-                            colonelMustardStyle.left = 'calc(' + colonelMustardStyle.left + ' + 50px)';
-                            colonelMustardStyle.top = 'calc(' + colonelMustardStyle.top + ' - 50px)';
-                        } else if (data.char == 'Ms. Peacock') {
-                            msPeacockStyle.left = 'calc(' + msPeacockStyle.left + ' - 50px)';
-                            msPeacockStyle.top = 'calc(' + msPeacockStyle.top + ' + 50px)';
+                            //colonelMustardStyle.left = 'calc(' + colonelMustardStyle.left + ' + 50px)';
+                            //colonelMustardStyle.top = 'calc(' + colonelMustardStyle.top + ' - 50px)';
+                            setMustardStyle((mustardStyle) => ({ ...mustardStyle, left: 'calc(' + mustardStyle.left + ' + 50px)' }));
+                            setMustardStyle((mustardStyle) => ({ ...mustardStyle, top: 'calc(' + mustardStyle.top + ' - 50px)' }));
+                        } else if (data.char == 'Ms. Peacock') { 
+                            //msPeacockStyle.left = 'calc(' + msPeacockStyle.left + ' - 50px)';
+                            //msPeacockStyle.top = 'calc(' + msPeacockStyle.top + ' + 50px)';
+                            setPeacockStyle((peacockStyle) => ({ ...peacockStyle, left: 'calc(' + peacockStyle.left + ' - 50px)' }));
+                            setPeacockStyle((peacockStyle) => ({ ...peacockStyle, top: 'calc(' + peacockStyle.top + ' + 50px)' }));
                         } else if (data.char == 'Mr. Green') {
-                            mrGreenStyle.left = 'calc(' + mrGreenStyle.left + ' + 0px)';
-                            mrGreenStyle.top = 'calc(' + mrGreenStyle.top + ' + 50px)';
+                            //mrGreenStyle.left = 'calc(' + mrGreenStyle.left + ' + 0px)';
+                            //mrGreenStyle.top = 'calc(' + mrGreenStyle.top + ' + 50px)';
+                            setGreenStyle((greenStyle) => ({ ...greenStyle, left: 'calc(' + greenStyle.left + ' + 0px)' }));
+                            setGreenStyle((greenStyle) => ({ ...greenStyle, top: 'calc(' + greenStyle.top + ' - 50px)' }));
                         } else if (data.char == 'Mrs. White') {
-                            mrsWhiteStyle.left = 'calc(' + mrsWhiteStyle.left + ' + 50px)';
-                            mrsWhiteStyle.top = 'calc(' + mrsWhiteStyle.top + ' + 50px)';
+                            //mrsWhiteStyle.left = 'calc(' + mrsWhiteStyle.left + ' + 50px)';
+                            //mrsWhiteStyle.top = 'calc(' + mrsWhiteStyle.top + ' + 50px)';
+                            setWhiteStyle((whiteStyle) => ({ ...whiteStyle, left: 'calc(' + whiteStyle.left + ' + 50px)' }));
+                            setWhiteStyle((whiteStyle) => ({ ...whiteStyle, top: 'calc(' + whiteStyle.top + ' + 50px)' }));
                         }
+        
                 }
             });
         }
@@ -255,12 +307,12 @@ function Board(props) {
 
     return (
         <div className="board">
-            <div className="miss-scarlett" style={missScarletStyle}></div>
-            <div className="professor-plum" style={professorPlumStyle}></div>
-            <div className="colonel-mustard" style={colonelMustardStyle}></div>
-            <div className="ms-peacock" style={msPeacockStyle}></div>
-            <div className="mr-green" style={mrGreenStyle}></div>
-            <div className="mrs-white" style={mrsWhiteStyle}></div>
+            <div className="miss-scarlett" style={scarletStyle}></div>
+            <div className="professor-plum" style={plumStyle}></div>
+            <div className="colonel-mustard" style={mustardStyle}></div>
+            <div className="ms-peacock" style={peacockStyle}></div>
+            <div className="mr-green" style={greenStyle}></div>
+            <div className="mrs-white" style={whiteStyle}></div>
             <div className="row">
                 <div className="room">
                     <text className="room-label">Study</text>

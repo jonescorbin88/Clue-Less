@@ -113,7 +113,8 @@ class Game:
                                     suggestion.character.get_str(),
                                     suggestion.weapon.get_str(),
                                     suggestion.room.get_str(),
-                                    self.board.get_room_str(self.cur_player.loc))
+                                    self.cur_player.loc)
+                                    
         
         self.move_character(suggestion.character.get_str(), self.board.room_locs[suggestion.room.get_str()])
         self.cur_player.last_suggested_room = self.cur_player.loc
@@ -124,6 +125,7 @@ class Game:
             card_lst = []
             for card in disproval_cards:
                 card_lst.append(card.get_str())
+            
             if len(list(disproval_cards)) != 0:
                 self.server.request_disprove(disproving_player.sid, card_lst)
                 return
