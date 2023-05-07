@@ -244,7 +244,7 @@ export function Disprove(props) {
         if (props.socket) {
             props.socket.on('disprove_request', (data) => {
                 setOptions(data.options);
-                setCard(data.options[1]);
+                setCard(data.options[0]);
                 setOpen(true);
             });
         }
@@ -253,6 +253,8 @@ export function Disprove(props) {
     function handleClick() {
         if (props.socket) {
             props.socket.emit('select_disprove', card);
+            console.log("!!!!!");
+            console.log(card);
             setOpen(false);
         }
     }

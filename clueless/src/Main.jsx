@@ -10,6 +10,7 @@ function Main(props) {
     const [gameStart, setGameStart] = useState(false);
     const [cards, setCards] = useState([]);
     const [character, setCharacter] = useState("");
+    const [location, setLocation] = useState([]);
 
     useEffect(() => {
         if (props.socket) {
@@ -55,7 +56,7 @@ function Main(props) {
                             <text className="subtitle">Can you solve the mystery?</text>
                             <img className="img-main" src={logo} alt="group logo"></img>
                         </div>
-                        <Board />
+                        <Board socket={props.socket} />
                         <div className="player-info">
                             <div className="player-cards">
                                 <text className="info">YOUR<br></br>CARDS:</text>

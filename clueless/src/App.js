@@ -19,7 +19,7 @@ const App = () => {
   }, []);
 
   return (
-    <Main 
+   < Main 
       socket={socket}
     />
   )
