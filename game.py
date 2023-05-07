@@ -112,7 +112,9 @@ class Game:
         self.server.emit_suggestion(self.cur_player.sid,
                                     suggestion.character.get_str(),
                                     suggestion.weapon.get_str(),
-                                    suggestion.room.get_str())
+                                    suggestion.room.get_str(),
+                                    self.board.get_room_str(self.cur_player.loc))
+        
         self.move_character(suggestion.character.get_str(), self.board.room_locs[suggestion.room.get_str()])
         self.cur_player.last_suggested_room = self.cur_player.loc
         for i in range(self.num_players - 1):
